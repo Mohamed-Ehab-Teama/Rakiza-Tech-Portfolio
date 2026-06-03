@@ -1,0 +1,216 @@
+/* ==========================================================================
+   terminal.css — interactive "Talk to my terminal" playground.
+
+   A real <input>-driven REPL dressed up as a shell. The shared .term-window /
+   .term-bar / .term-body / .term-prompt / .term-path tokens do the heavy
+   lifting; this file only adds the input line, output line rhythm, a tidy
+   scrollbar and a few REPL-specific helpers. Scoped with .terminal__.
+   ========================================================================== */
+
+.terminal {
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal__ghost {
+  top: clamp(2rem, 6vw, 4rem);
+  left: var(--gutter);
+}
+
+.terminal .section-head,
+.terminal__window,
+.terminal__hint {
+  position: relative;
+  z-index: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Window
+   -------------------------------------------------------------------------- */
+.terminal__window {
+  max-width: 900px;
+  margin-inline: auto;
+  margin-top: var(--sp-8);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.03) inset,
+    0 30px 80px -40px rgba(0, 0, 0, 0.8);
+}
+
+/* The window is one big click target that focuses the input. */
+.terminal__window { cursor: text; }
+.terminal__window a,
+.terminal__window .term-dot { cursor: pointer; }
+
+/* --------------------------------------------------------------------------
+   Output area
+   -------------------------------------------------------------------------- */
+.terminal__body {
+  min-height: 360px;
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 0.62rem + 0.55vw, 0.95rem);
+  line-height: 1.7;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .terminal__body { scroll-behavior: auto; }
+}
+
+/* Each emitted block: an echoed command, or a command's output. */
+.terminal__body .term-line {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.terminal__body .term-line + .term-line { margin-top: 0.12em; }
+
+/* spacing between a command's echo and the next command block */
+.terminal__body .terminal__block + .terminal__block { margin-top: var(--sp-3); }
+.terminal__body .terminal__block { display: block; }
+
+/* Echoed command line: "visitor@mwm:~$ help" */
+.terminal__echo .term-prompt { color: var(--term); }
+.terminal__echo .term-path { color: var(--accent); }
+.terminal__echo .terminal__cmd { color: var(--text); }
+
+/* Links inside output */
+.terminal__body a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.35);
+  transition: border-color var(--dur-1) var(--ease-out),
+              color var(--dur-1) var(--ease-out);
+}
+.terminal__body a:hover,
+.terminal__body a:focus-visible {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+/* Generic helpers used by command output */
+.terminal__title {
+  color: var(--text);
+  font-weight: 600;
+}
+.terminal__muted { color: var(--text-faint); }
+.terminal__cols {
+  display: grid;
+  grid-template-columns: minmax(7.5em, max-content) 1fr;
+  gap: 0.1em 1.4em;
+}
+.terminal__key { color: var(--accent-2); }
+.terminal__ls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35em 1.6em;
+}
+.terminal__ls .terminal__dir { color: var(--accent); }
+.terminal__ls .terminal__file { color: var(--text-dim); }
+
+/* ASCII banner */
+.terminal__banner {
+  display: block;
+  color: var(--accent);
+  line-height: 1.15;
+  white-space: pre;
+  font-size: clamp(0.5rem, 0.3rem + 0.9vw, 0.8rem);
+  text-shadow: 0 0 18px rgba(var(--accent-rgb), 0.35);
+  overflow-x: auto;
+}
+
+/* skills / grouped chips */
+.terminal__group { margin-top: 0.2em; }
+.terminal__group-name { color: var(--accent-2); }
+.terminal__chips { color: var(--text-dim); }
+
+/* --------------------------------------------------------------------------
+   Input line — a real <input> styled to read as a shell prompt
+   -------------------------------------------------------------------------- */
+.terminal__inputline {
+  display: flex;
+  align-items: center;
+  gap: 0.5ch;
+  padding: var(--sp-3) clamp(0.9rem, 2.4vw, 1.4rem);
+  border-top: 1px solid var(--border);
+  background: rgba(var(--accent-rgb), 0.02);
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 0.62rem + 0.55vw, 0.95rem);
+  line-height: 1.6;
+}
+
+.terminal__inputline .term-prompt { color: var(--term); white-space: nowrap; }
+.terminal__inputline .term-path { color: var(--accent); white-space: nowrap; }
+
+.terminal__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  letter-spacing: inherit;
+  caret-color: var(--accent);
+}
+.terminal__input::placeholder { color: var(--text-faint); }
+.terminal__input::selection { background: rgba(var(--accent-rgb), 0.28); }
+
+/* Faux blinking caret — hidden once the native caret takes over on focus. */
+.terminal__caret { flex: 0 0 auto; }
+.terminal__inputline:focus-within .terminal__caret { display: none; }
+
+/* Visible focus state for keyboard users on the whole line. */
+.terminal__inputline:focus-within {
+  background: rgba(var(--accent-rgb), 0.05);
+  box-shadow: inset 0 1px 0 rgba(var(--accent-rgb), 0.18);
+}
+
+/* --------------------------------------------------------------------------
+   Hint row
+   -------------------------------------------------------------------------- */
+.terminal__hint {
+  margin-top: var(--sp-4);
+  text-align: center;
+  color: var(--text-faint);
+  font-size: var(--fs-sm);
+}
+.terminal__hint-key {
+  color: var(--text-dim);
+  padding: 0.1em 0.5em;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+}
+.terminal__hint-sep { margin-inline: 0.5em; color: var(--text-faint); }
+
+/* --------------------------------------------------------------------------
+   Scrollbar — tidy, on-brand
+   -------------------------------------------------------------------------- */
+.terminal__body { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+.terminal__body::-webkit-scrollbar { width: 10px; }
+.terminal__body::-webkit-scrollbar-track { background: transparent; }
+.terminal__body::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: var(--r-full);
+}
+.terminal__body::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--accent-rgb), 0.4);
+  background-clip: padding-box;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 720px) {
+  .terminal__window { margin-top: var(--sp-6); }
+  .terminal__body { min-height: 300px; }
+  .terminal__cols { grid-template-columns: 1fr; gap: 0 0; }
+  .terminal__cols .terminal__key { margin-top: 0.4em; }
+}

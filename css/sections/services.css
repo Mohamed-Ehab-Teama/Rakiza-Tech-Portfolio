@@ -1,0 +1,422 @@
+/* ==========================================================================
+   services.css — "What I build, end to end" bento grid of 5 core motifs.
+   Scoped with the .services__ prefix. Motifs idle subtly, come alive on
+   hover (and when .is-active is added by JS as cards enter view).
+   Reduced motion freezes all motif animation.
+   ========================================================================== */
+
+.services {
+  position: relative;
+  overflow: hidden;
+}
+
+.services__ghost {
+  top: clamp(2rem, 6vw, 4rem);
+  right: var(--gutter);
+}
+
+.services .section-head,
+.services__grid {
+  position: relative;
+  z-index: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Bento grid — 1 col (mobile) → 2 col (tablet) → 6 col (desktop)
+   -------------------------------------------------------------------------- */
+.services__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1rem, 1.6vw, 1.4rem);
+}
+
+@media (min-width: 720px) {
+  .services__grid { grid-template-columns: repeat(2, 1fr); }
+  /* wide card spans both columns on the first row */
+  .services__card--wide { grid-column: 1 / -1; }
+}
+
+@media (min-width: 1024px) {
+  .services__grid {
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 1fr;
+  }
+  /* row 1: wide CODE (4) + APPS (2)  ·  row 2: three equal thirds */
+  .services__card--wide { grid-column: span 4; }
+  .services__card        { grid-column: span 2; }
+}
+
+/* --------------------------------------------------------------------------
+   Card layout
+   -------------------------------------------------------------------------- */
+.services__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-height: 260px;
+}
+.services__card:hover { transform: translateY(-4px); }
+
+.services__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+.services__num {
+  font-size: var(--fs-mono);
+  letter-spacing: 0.14em;
+  color: var(--text-faint);
+}
+
+.services__icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-md);
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.08);
+  border: 1px solid rgba(var(--accent-rgb), 0.18);
+  transition: color var(--dur-2) var(--ease-out),
+              background var(--dur-2) var(--ease-out),
+              border-color var(--dur-2) var(--ease-out),
+              transform var(--dur-2) var(--ease-out);
+}
+.services__icon svg { width: 22px; height: 22px; }
+.services__card:hover .services__icon {
+  color: var(--accent-2);
+  background: rgba(var(--accent2-rgb), 0.12);
+  border-color: rgba(var(--accent2-rgb), 0.3);
+  transform: rotate(-4deg) scale(1.05);
+}
+
+.services__title {
+  font-size: var(--fs-h3);
+  letter-spacing: -0.01em;
+}
+.services__desc {
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+  max-width: 46ch;
+}
+
+/* tags pushed to the bottom of the card */
+.services__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: auto;
+  padding-top: var(--sp-2);
+}
+.services__tags .tag { transition: color var(--dur-1) var(--ease-out),
+                                    border-color var(--dur-1) var(--ease-out); }
+.services__card:hover .services__tags .tag {
+  border-color: rgba(var(--accent-rgb), 0.28);
+  color: var(--text);
+}
+
+/* --------------------------------------------------------------------------
+   Motif box (shared chrome) — idle subtle, hover/active lively
+   -------------------------------------------------------------------------- */
+.services__motif {
+  position: relative;
+  height: 132px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent),
+    var(--bg-2);
+  overflow: hidden;
+  transition: border-color var(--dur-2) var(--ease-out);
+}
+.services__card:hover .services__motif { border-color: var(--border-strong); }
+.services__motif::after {
+  /* sheen sweep — only animates on hover/active */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 35%,
+              rgba(var(--accent-rgb), 0.10) 50%, transparent 65%);
+  transform: translateX(-120%);
+  opacity: 0;
+  pointer-events: none;
+}
+.services__card:hover .services__motif::after,
+.services__card.is-active .services__motif::after {
+  opacity: 1;
+  animation: services-sheen 2.6s var(--ease-inout) infinite;
+}
+@keyframes services-sheen {
+  0%   { transform: translateX(-120%); }
+  60%  { transform: translateX(120%); }
+  100% { transform: translateX(120%); }
+}
+
+/* The wide CODE card gets a taller motif on desktop */
+@media (min-width: 1024px) {
+  .services__card--wide .services__motif { height: 160px; }
+}
+
+/* ==========================================================================
+   01 — CODE motif : syntax lines "typing" in via step reveal
+   ========================================================================== */
+.services__code {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  font-size: clamp(0.66rem, 1vw, 0.78rem);
+  line-height: 1.6;
+  color: var(--text-dim);
+  white-space: pre;
+}
+.services__line {
+  display: block;
+  opacity: 0.55;
+  transition: opacity var(--dur-2) var(--ease-out);
+}
+.services__card:hover .services__line,
+.services__card.is-active .services__line { opacity: 0; }
+.services__card:hover .services__line {
+  animation: services-type-in 0.45s var(--ease-out) forwards;
+}
+.services__card.is-active .services__line {
+  animation: services-type-in 0.45s var(--ease-out) forwards;
+}
+.services__line:nth-child(1) { animation-delay: 0.05s; }
+.services__line:nth-child(2) { animation-delay: 0.18s; }
+.services__line:nth-child(3) { animation-delay: 0.31s; }
+.services__line:nth-child(4) { animation-delay: 0.44s; }
+.services__line:nth-child(5) { animation-delay: 0.57s; }
+.services__line:nth-child(6) { animation-delay: 0.70s; }
+@keyframes services-type-in {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.services__cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--accent);
+  animation: caret-blink 1s steps(1) infinite;
+}
+
+/* ==========================================================================
+   02 — APPS motif : phone window with shimmering placeholder rows
+   ========================================================================== */
+.services__motif--app { display: grid; place-items: center; }
+.services__phone {
+  position: relative;
+  width: 92px;
+  height: 108px;
+  margin-top: 8px;
+  border-radius: 14px 14px 0 0;
+  border: 1px solid var(--border-strong);
+  border-bottom: none;
+  background: var(--surface);
+  padding: 12px 10px 0;
+  box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.9);
+}
+.services__phone-notch {
+  position: absolute;
+  top: 6px; left: 50%;
+  transform: translateX(-50%);
+  width: 26px; height: 4px;
+  border-radius: 999px;
+  background: var(--surface-3);
+}
+.services__phone-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 6px;
+}
+.services__row {
+  height: 7px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  background-image: linear-gradient(90deg,
+    var(--surface-3) 0%, rgba(var(--accent-rgb), 0.28) 50%, var(--surface-3) 100%);
+  background-size: 200% 100%;
+  background-position: 200% 0;
+}
+.services__row--bar { height: 12px; background-image: none; background: rgba(var(--accent-rgb), 0.22); }
+.services__row--w70 { width: 70%; }
+.services__row--w90 { width: 90%; }
+.services__row--w50 { width: 50%; }
+.services__row--w80 { width: 80%; }
+.services__card:hover .services__row:not(.services__row--bar),
+.services__card.is-active .services__row:not(.services__row--bar) {
+  animation: services-shimmer 1.4s linear infinite;
+}
+.services__card:hover .services__row:nth-child(3) { animation-delay: 0.15s; }
+.services__card:hover .services__row:nth-child(4) { animation-delay: 0.3s; }
+.services__card:hover .services__row:nth-child(5) { animation-delay: 0.45s; }
+@keyframes services-shimmer {
+  to { background-position: -200% 0; }
+}
+
+/* ==========================================================================
+   03 — DASHBOARDS motif : mini bar chart that grows / loops
+   ========================================================================== */
+.services__motif--chart { display: grid; place-items: end center; padding: 0 1rem 0.9rem; }
+.services__chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 84px;
+  width: 100%;
+  max-width: 220px;
+}
+.services__bar {
+  position: relative;
+  flex: 1;
+  height: var(--h);
+  min-height: 6px;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.85), rgba(var(--accent2-rgb), 0.5));
+  transform-origin: bottom;
+  transform: scaleY(0.55);
+  transition: transform var(--dur-2) var(--ease-out);
+}
+.services__card:hover .services__bar,
+.services__card.is-active .services__bar { transform: scaleY(1); }
+.services__card:hover .services__bar {
+  animation: services-grow 1.8s var(--ease-inout) infinite alternate;
+}
+.services__card.is-active .services__bar {
+  animation: services-grow 1.8s var(--ease-inout) infinite alternate;
+}
+.services__bar:nth-child(1) { animation-delay: 0s; }
+.services__bar:nth-child(2) { animation-delay: 0.1s; }
+.services__bar:nth-child(3) { animation-delay: 0.2s; }
+.services__bar:nth-child(4) { animation-delay: 0.3s; }
+.services__bar:nth-child(5) { animation-delay: 0.4s; }
+.services__bar:nth-child(6) { animation-delay: 0.5s; }
+.services__bar:nth-child(7) { animation-delay: 0.6s; }
+@keyframes services-grow {
+  from { transform: scaleY(0.45); }
+  to   { transform: scaleY(1); }
+}
+
+/* ==========================================================================
+   04 — DATABASES motif : stacked table rows with a flowing query pulse
+   ========================================================================== */
+.services__motif--db { padding: 0.9rem 1rem; }
+.services__db {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  justify-content: center;
+}
+.services__db-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: border-color var(--dur-1) var(--ease-out), background var(--dur-1) var(--ease-out);
+}
+.services__db-key {
+  width: 14px; height: 8px;
+  border-radius: 3px;
+  background: rgba(var(--accent2-rgb), 0.55);
+}
+.services__db-cell {
+  flex: 1; height: 8px;
+  border-radius: 3px;
+  background: var(--surface-3);
+}
+/* flowing query pulse highlights one row at a time */
+.services__card:hover .services__db-row,
+.services__card.is-active .services__db-row {
+  animation: services-db-scan 2.4s var(--ease-inout) infinite;
+}
+.services__db-row:nth-child(1) { animation-delay: 0s; }
+.services__db-row:nth-child(2) { animation-delay: 0.6s; }
+.services__db-row:nth-child(3) { animation-delay: 1.2s; }
+.services__db-row:nth-child(4) { animation-delay: 1.8s; }
+@keyframes services-db-scan {
+  0%, 100% { border-color: var(--border); background: var(--surface); }
+  50%      { border-color: rgba(var(--accent-rgb), 0.45); background: rgba(var(--accent-rgb), 0.07); }
+}
+.services__db-pulse {
+  position: absolute;
+  left: 0; top: 0;
+  width: 2px; height: 100%;
+  background: linear-gradient(180deg, transparent, var(--accent), transparent);
+  opacity: 0;
+}
+.services__card:hover .services__db-pulse,
+.services__card.is-active .services__db-pulse {
+  opacity: 0.8;
+  animation: services-db-flow 2.4s linear infinite;
+}
+@keyframes services-db-flow {
+  from { transform: translateX(0); }
+  to   { transform: translateX(190px); }
+}
+
+/* ==========================================================================
+   05 — CLI & AUTOMATION motif : tiny terminal, lines typing in
+   ========================================================================== */
+.services__motif--cli { padding: 0; }
+.services__term {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 100%;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-mono);
+  font-size: clamp(0.66rem, 1vw, 0.76rem);
+  line-height: 1.6;
+  justify-content: center;
+}
+.services__term-line {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: 0.6;
+  transition: opacity var(--dur-2) var(--ease-out);
+}
+.services__card:hover .services__term-line,
+.services__card.is-active .services__term-line { opacity: 1; }
+.services__card:hover .services__term-line:nth-child(-n+3),
+.services__card.is-active .services__term-line:nth-child(-n+3) {
+  width: 0;
+  animation: services-typewrite 0.7s steps(20, end) forwards;
+}
+.services__term-line:nth-child(1) { animation-delay: 0.05s; }
+.services__term-line:nth-child(2) { animation-delay: 0.6s; }
+.services__term-line:nth-child(3) { animation-delay: 1.15s; }
+@keyframes services-typewrite {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion — freeze every motif at its resting (final) state
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .services__motif::after,
+  .services__line,
+  .services__row,
+  .services__bar,
+  .services__db-row,
+  .services__db-pulse,
+  .services__term-line,
+  .services__cursor,
+  .services__card .caret {
+    animation: none !important;
+  }
+  .services__line { opacity: 1; }
+  .services__bar { transform: scaleY(1); }
+  .services__term-line { width: 100%; opacity: 1; }
+  .services__card:hover { transform: none; }
+}

@@ -1,0 +1,202 @@
+/* ==========================================================================
+   hero.css — landing hero. Full-screen, code-rain canvas behind staged
+   intro content. Scoped with the .hero__ prefix.
+   ========================================================================== */
+
+.hero {
+  min-height: 100svh;
+  position: relative;
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+  padding-block: clamp(6rem, 14vh, 9rem);
+  background:
+    radial-gradient(1100px 620px at 78% -10%, rgba(var(--accent2-rgb), 0.12), transparent 60%),
+    radial-gradient(900px 560px at 8% 110%, rgba(var(--accent-rgb), 0.10), transparent 60%),
+    var(--bg);
+}
+
+/* --- Background canvas (code rain) --------------------------------------- */
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Soft vignette so content stays legible over the rain */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 30% 50%, transparent 40%, rgba(8, 9, 13, 0.55) 100%),
+    linear-gradient(180deg, rgba(8, 9, 13, 0.35), transparent 22%, transparent 78%, rgba(8, 9, 13, 0.55));
+}
+
+/* --- Content ------------------------------------------------------------- */
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(1.1rem, 2.4vw, 1.8rem);
+}
+
+.hero__intro { row-gap: var(--sp-2); }
+
+.hero__id {
+  font-size: var(--fs-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.hero__title {
+  font-size: var(--fs-hero);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  margin: 0;
+  text-wrap: balance;
+}
+.hero__title .gradient-text { display: inline-block; }
+
+.hero__lead {
+  max-width: 60ch;
+  color: var(--text-dim);
+}
+
+/* Typed terminal strip */
+.hero__typed {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  max-width: 100%;
+  padding: 0.7rem 1rem;
+  font-size: clamp(0.82rem, 1.4vw, 1rem);
+  color: var(--text);
+  background: rgba(var(--term-rgb), 0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.hero__typed #hero-type {
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hero__typed .caret { margin-left: 0; }
+
+.hero__cta { margin-top: var(--sp-2); }
+
+/* Stats strip */
+.hero__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1.4rem, 4vw, 3rem);
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--border);
+  width: 100%;
+  max-width: 720px;
+}
+.hero__stat { display: flex; flex-direction: column; gap: 2px; }
+.hero__stat-n {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.hero__stat-l {
+  font-size: var(--fs-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* --- Corner meta --------------------------------------------------------- */
+.hero__meta {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--fs-mono);
+  letter-spacing: 0.12em;
+  color: var(--text-faint);
+}
+.hero__meta--tr {
+  top: clamp(5.5rem, 12vh, 7.5rem);
+  right: var(--gutter);
+  text-align: right;
+  align-items: flex-end;
+}
+.hero__ver { color: var(--text-dim); }
+.hero__coords { font-variant-numeric: tabular-nums; }
+
+/* --- Scroll indicator (bottom-left) ------------------------------------- */
+.hero__scroll {
+  position: absolute;
+  z-index: 1;
+  left: var(--gutter);
+  bottom: clamp(1.5rem, 4vh, 2.75rem);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  transition: color var(--dur-1) var(--ease-out);
+}
+.hero__scroll:hover { color: var(--text-dim); }
+.hero__scroll-line {
+  position: relative;
+  display: inline-block;
+  width: 1px;
+  height: 46px;
+  background: var(--border-strong);
+  overflow: hidden;
+}
+.hero__scroll-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(180deg, transparent, var(--accent));
+  animation: hero-scroll-run 1.8s var(--ease-inout) infinite;
+}
+@keyframes hero-scroll-run {
+  0%   { transform: translateY(-100%); }
+  60%  { transform: translateY(250%); }
+  100% { transform: translateY(250%); }
+}
+
+/* --- Responsive --------------------------------------------------------- */
+@media (max-width: 960px) {
+  .hero__meta--tr { top: clamp(5rem, 11vh, 6.5rem); }
+}
+
+@media (max-width: 720px) {
+  .hero__id { display: none; }
+  .hero__stats { gap: 1.25rem 1.6rem; }
+}
+
+@media (max-width: 600px) {
+  .hero__meta { display: none; }
+  .hero__scroll-label { display: none; }
+  .hero__scroll { left: 50%; transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__scroll-line::after { animation: none; }
+}

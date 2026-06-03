@@ -1,0 +1,469 @@
+/* ==========================================================================
+   dashboard.css — "04 DASHBOARD" / #metrics — "By the numbers."
+   A bento grid of analytics widgets: 4 KPI cards, a bar chart, a line/area
+   chart, twin donut gauges, and an activity log. Charts render correctly in
+   their FINAL state with no JS; dashboard.js layers the entrance animation.
+   All custom selectors are scoped with the .metrics__ prefix.
+   ========================================================================== */
+
+.metrics {
+  position: relative;
+  overflow: hidden;
+}
+
+.metrics__ghost {
+  top: clamp(-2rem, -1vw, 0rem);
+  left: var(--gutter);
+}
+
+/* --------------------------------------------------------------------------
+   Bento grid — 4 columns on desktop.
+   KPIs take 1 col each (top row). Bars span 2, line spans 2.
+   Donuts span 2, log spans 2 (bottom row).
+   -------------------------------------------------------------------------- */
+.metrics__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(0.85rem, 1.6vw, 1.25rem);
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.metrics__card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* let flex children shrink, prevent overflow */
+  padding: clamp(1.1rem, 1.8vw, 1.5rem);
+}
+
+.metrics__bars  { grid-column: span 2; }
+.metrics__line  { grid-column: span 2; }
+.metrics__donuts { grid-column: span 2; }
+.metrics__log    { grid-column: span 2; }
+
+/* --------------------------------------------------------------------------
+   Shared widget header / footer / badges
+   -------------------------------------------------------------------------- */
+.metrics__card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-4);
+}
+
+.metrics__card-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.metrics__badge {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.22em 0.6em;
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+}
+
+.metrics__card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-mono);
+  color: var(--text-faint);
+}
+
+.metrics__foot-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.metrics__foot-val { color: var(--text-dim); }
+
+.metrics__swatch {
+  width: 0.72em;
+  height: 0.72em;
+  border-radius: 3px;
+  flex: none;
+}
+.metrics__swatch--accent { background: var(--accent); }
+
+/* --------------------------------------------------------------------------
+   KPI cards
+   -------------------------------------------------------------------------- */
+.metrics__kpi-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+
+.metrics__kpi-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.metrics__kpi-num {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.metrics__kpi-num .tnum {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Inline sparkline */
+.metrics__spark {
+  display: block;
+  width: 100%;
+  height: clamp(28px, 5vw, 38px);
+  margin-top: var(--sp-3);
+  overflow: visible;
+}
+
+.metrics__spark-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 2px 6px rgba(var(--accent-rgb), 0.35));
+}
+.metrics__spark--term   .metrics__spark-line { stroke: var(--term);  filter: drop-shadow(0 2px 6px rgba(var(--term-rgb), 0.35)); }
+.metrics__spark--violet .metrics__spark-line { stroke: var(--accent-2); filter: drop-shadow(0 2px 6px rgba(var(--accent2-rgb), 0.35)); }
+.metrics__spark--amber  .metrics__spark-line { stroke: var(--warn); filter: none; }
+
+.metrics__delta {
+  margin: var(--sp-3) 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: var(--fs-mono);
+  letter-spacing: 0.02em;
+  color: var(--text-faint);
+}
+.metrics__delta--up  { color: var(--term); }
+.metrics__delta-arrow { font-size: 0.7em; }
+
+/* --------------------------------------------------------------------------
+   Bar chart — "Commits / month"
+   Bars scale from the baseline. JS animates --grow 0→1; CSS provides the
+   final (--grow:1) state by default for the no-JS path.
+   -------------------------------------------------------------------------- */
+.metrics__bars-plot {
+  flex: 1;
+  min-height: clamp(120px, 18vw, 168px);
+  display: flex;
+  align-items: stretch;
+}
+
+.metrics__bars-track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  align-items: end;
+  gap: clamp(3px, 0.7vw, 8px);
+}
+
+.metrics__bar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.metrics__bar-fill {
+  width: 100%;
+  /* Height = value fraction of the plot; --grow drives the entrance. */
+  height: calc(var(--v, 0.5) * 100% * var(--grow, 1));
+  min-height: 3px;
+  border-radius: var(--r-sm) var(--r-sm) 2px 2px;
+  background: linear-gradient(
+    to top,
+    rgba(var(--accent-rgb), 0.25),
+    rgba(var(--accent-rgb), 0.85)
+  );
+  transition: filter var(--dur-1) var(--ease-out);
+}
+
+.metrics__bar--peak .metrics__bar-fill {
+  background: linear-gradient(to top, rgba(var(--accent2-rgb), 0.35), var(--accent));
+  box-shadow: 0 0 18px -4px rgba(var(--accent-rgb), 0.6);
+}
+
+.metrics__bar:hover .metrics__bar-fill {
+  filter: brightness(1.25);
+}
+
+.metrics__bar-x {
+  margin-top: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+
+/* --------------------------------------------------------------------------
+   Line / area chart — "Performance"
+   -------------------------------------------------------------------------- */
+.metrics__line-plot {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.metrics__line-svg {
+  display: block;
+  width: 100%;
+  height: clamp(120px, 18vw, 160px);
+  overflow: visible;
+}
+
+.metrics__line-grid line {
+  stroke: var(--border);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.metrics__line-area {
+  /* final state: visible. JS may fade it in alongside the stroke draw. */
+  opacity: 1;
+}
+
+.metrics__line-stroke {
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 3px 10px rgba(var(--accent-rgb), 0.4));
+}
+
+.metrics__line-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+
+/* --------------------------------------------------------------------------
+   Donut gauges — twin radial progress
+   -------------------------------------------------------------------------- */
+.metrics__donuts-row {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  align-items: center;
+  justify-items: center;
+}
+
+.metrics__donut {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  max-width: 132px;
+  aspect-ratio: 1;
+}
+
+.metrics__donut-svg {
+  width: 100%;
+  height: 100%;
+  /* start the ring at 12 o'clock */
+  transform: rotate(-90deg);
+}
+
+.metrics__donut-track {
+  fill: none;
+  stroke: var(--surface-3);
+  stroke-width: 9;
+}
+
+.metrics__donut-ring {
+  fill: none;
+  stroke-width: 9;
+  stroke-linecap: round;
+  /* Circumference for r=52 ≈ 326.7. Default (no-JS) = filled to target via
+     inline-ish defaults; JS recomputes precisely. We expose two CSS vars:
+     --circ (total) and --dash-gap (the gap = circ * (1 - pct)). */
+  --circ: 326.7;
+  stroke-dasharray: var(--circ);
+  /* final state shows full progress for the donut's own data-pct (set by JS).
+     Static fallback below sets sensible per-ring offsets. */
+}
+
+.metrics__donut-ring--accent {
+  stroke: var(--accent);
+  /* 92% → gap = 326.7 * 0.08 ≈ 26.1 */
+  stroke-dashoffset: 26.1;
+  filter: drop-shadow(0 0 8px rgba(var(--accent-rgb), 0.45));
+}
+.metrics__donut-ring--violet {
+  stroke: var(--accent-2);
+  /* 88% → gap = 326.7 * 0.12 ≈ 39.2 */
+  stroke-dashoffset: 39.2;
+  filter: drop-shadow(0 0 8px rgba(var(--accent2-rgb), 0.45));
+}
+
+.metrics__donut-cap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
+  text-align: center;
+}
+
+.metrics__donut-pct {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.metrics__donut-name {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* --------------------------------------------------------------------------
+   Activity log
+   -------------------------------------------------------------------------- */
+.metrics__live-dot {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: var(--r-full);
+  background: var(--term);
+  box-shadow: 0 0 0 0 rgba(var(--term-rgb), 0.6);
+  animation: metrics-live 2s ease-out infinite;
+}
+
+.metrics__log-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(0.4rem, 1vw, 0.65rem);
+  font-size: var(--fs-mono);
+}
+
+.metrics__log-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  transition: border-color var(--dur-1) var(--ease-out), background var(--dur-1) var(--ease-out);
+}
+
+.metrics__log-item:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-3);
+}
+
+.metrics__log-time { font-variant-numeric: tabular-nums; }
+
+.metrics__log-msg {
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metrics__log-ok {
+  color: var(--term);
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   Motion keyframes
+   -------------------------------------------------------------------------- */
+@keyframes metrics-live {
+  0%   { box-shadow: 0 0 0 0 rgba(var(--term-rgb), 0.5); }
+  70%  { box-shadow: 0 0 0 6px rgba(var(--term-rgb), 0); }
+  100% { box-shadow: 0 0 0 0 rgba(var(--term-rgb), 0); }
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   ~960px: KPIs 2x2, wide widgets stack to full row span.
+   ~720px: single column everywhere.
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .metrics__grid { grid-template-columns: repeat(2, 1fr); }
+  .metrics__kpi   { grid-column: span 1; }
+  .metrics__bars,
+  .metrics__line,
+  .metrics__donuts,
+  .metrics__log   { grid-column: span 2; }
+}
+
+@media (max-width: 720px) {
+  .metrics__grid { grid-template-columns: 1fr; }
+  .metrics__kpi,
+  .metrics__bars,
+  .metrics__line,
+  .metrics__donuts,
+  .metrics__log { grid-column: span 1; }
+}
+
+@media (max-width: 400px) {
+  .metrics__bar-x:nth-child(n) { font-size: 0.55rem; }
+  .metrics__donuts-row { gap: 0.6rem; }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion — kill the looping live dot pulse (charts already render
+   their final state from base CSS / the JS guard).
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .metrics__live-dot { animation: none; }
+}

@@ -1,0 +1,213 @@
+/* ==========================================================================
+   about.css — "01 ABOUT" section
+   Two-column: bio (left) + IDE-styled code card (right), then a stats strip.
+   All custom selectors are scoped with the .about__ prefix.
+   ========================================================================== */
+
+.about {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Huge faint background index, anchored to the section corner. */
+.about__ghost {
+  top: clamp(-2rem, -1vw, 0rem);
+  right: var(--gutter);
+}
+
+/* --------------------------------------------------------------------------
+   Two-column grid
+   -------------------------------------------------------------------------- */
+.about__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+}
+
+.about__title {
+  max-width: 16ch;
+}
+
+.about__bio {
+  max-width: 56ch;
+}
+
+.about__bio p {
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+}
+
+.about__avail {
+  margin-top: var(--sp-5);
+}
+
+/* --------------------------------------------------------------------------
+   Code "about card" — IDE feel with a line-number gutter
+   -------------------------------------------------------------------------- */
+.about__card-wrap {
+  position: sticky;
+  top: clamp(5rem, 14vh, 8rem);
+  will-change: transform;
+}
+
+.about__card {
+  /* Faint accent glow so the card reads as the focal object. */
+  box-shadow:
+    0 40px 90px -45px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(255, 255, 255, 0.02),
+    0 0 60px -30px rgba(var(--accent-rgb), 0.25);
+}
+
+.about__code {
+  padding: clamp(1.1rem, 2vw, 1.6rem) 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Line-number gutter via CSS counter. */
+.about__lines {
+  counter-reset: ln;
+  margin: 0;
+  min-width: max-content;
+  font-size: clamp(0.78rem, 1.15vw, 0.92rem);
+  line-height: 1.85;
+}
+
+.about__lines > li {
+  position: relative;
+  display: block;
+  padding-left: 3.4rem;
+  padding-right: clamp(1rem, 2vw, 1.6rem);
+  white-space: pre;
+  color: var(--text-dim);
+  transition: background var(--dur-1) var(--ease-out);
+}
+
+.about__lines > li::before {
+  counter-increment: ln;
+  content: counter(ln);
+  position: absolute;
+  left: 0;
+  width: 2.6rem;
+  padding-right: 0.7rem;
+  text-align: right;
+  color: var(--text-faint);
+  opacity: 0.55;
+  border-right: 1px solid var(--border);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.about__lines > li:hover {
+  background: rgba(var(--accent-rgb), 0.04);
+}
+
+/* Object property keys read as soft text against the punctuation. */
+.about__prop {
+  color: var(--text);
+}
+
+/* Typewriter caret appended to a value while it re-types (JS-driven). */
+.about__type.is-typing::after {
+  content: "";
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 1px;
+  background: var(--accent);
+  vertical-align: text-bottom;
+  animation: caret-blink 1s steps(1) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   Stats strip
+   -------------------------------------------------------------------------- */
+.about__stats-wrap {
+  position: relative;
+  z-index: 1;
+  margin-top: clamp(3rem, 7vw, 6rem);
+}
+
+.about__stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  margin: 0;
+  padding-top: clamp(1.75rem, 4vw, 3rem);
+  border-top: 1px solid var(--border);
+}
+
+.about__stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  position: relative;
+}
+
+/* Subtle vertical separators between stats (not before the first). */
+.about__stat + .about__stat::before {
+  content: "";
+  position: absolute;
+  left: calc(clamp(1.25rem, 3vw, 2.5rem) / -2);
+  top: 0.35em;
+  bottom: 0.35em;
+  width: 1px;
+  background: var(--border);
+}
+
+.about__stat-num {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.2rem, 4.6vw, 3.6rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.about__stat-num .tnum {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.about__stat-label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 960px) {
+  .about__stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(1.75rem, 4vw, 2.5rem) clamp(1.25rem, 3vw, 2rem);
+  }
+  /* Drop the dividers on the wrapped 2x2 layout for cleaner rhythm. */
+  .about__stat + .about__stat::before { display: none; }
+}
+
+@media (max-width: 880px) {
+  .about__grid {
+    grid-template-columns: 1fr;
+    gap: clamp(2rem, 8vw, 3rem);
+  }
+  /* Bio reads first; card un-sticks on stacked layout. */
+  .about__intro { order: 1; }
+  .about__card-wrap { order: 2; position: static; top: auto; }
+  .about__title { max-width: none; }
+  .about__bio { max-width: none; }
+}
+
+@media (max-width: 480px) {
+  .about__stats { grid-template-columns: 1fr; }
+}

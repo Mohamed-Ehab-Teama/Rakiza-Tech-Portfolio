@@ -1,0 +1,11 @@
+# Dev tooling / audit scratch (not part of the site)
+_audit/
+_verify/
+_shot/
+.build/
+node_modules/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.log

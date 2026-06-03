@@ -1,0 +1,207 @@
+/* ==========================================================================
+   contact.css — closing CTA + front-end-only contact form.
+   Two columns (lead + form panel) collapsing to one below 880px.
+   Scoped with the .contact__ prefix. Uses shared .field / .btn / .status /
+   .term-* components; only bespoke layout + status terminal styling here.
+   ========================================================================== */
+
+.contact {
+  position: relative;
+  overflow: hidden;
+}
+
+.contact__ghost {
+  bottom: clamp(1rem, 5vw, 3rem);
+  left: var(--gutter);
+}
+
+.contact__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2.5rem, 5vw, 4.5rem);
+  align-items: start;
+}
+
+@media (min-width: 880px) {
+  .contact__grid {
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(3rem, 5vw, 6rem);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   LEFT — closing CTA
+   -------------------------------------------------------------------------- */
+.contact__lead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.contact .section-head { margin-bottom: 0; }
+
+.contact__title {
+  font-size: clamp(2.4rem, 7vw, var(--fs-d1));
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
+.contact__say { max-width: 46ch; }
+
+/* Big mailto link */
+.contact__email {
+  align-self: flex-start;
+  font-size: clamp(1.5rem, 3.5vw, 2.6rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  word-break: break-word;
+  transition: color var(--dur-1) var(--ease-out);
+}
+.contact__email:hover { color: var(--accent); }
+
+.contact__avail { margin: 0; }
+
+/* Social row */
+.contact__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-top: var(--sp-2);
+}
+.contact__social {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 0.6em 1em;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  transition: color var(--dur-1) var(--ease-out),
+              border-color var(--dur-1) var(--ease-out),
+              background var(--dur-1) var(--ease-out),
+              transform var(--dur-1) var(--ease-out);
+}
+.contact__social svg { width: 16px; height: 16px; flex-shrink: 0; }
+.contact__social:hover,
+.contact__social:focus-visible {
+  color: var(--text);
+  border-color: rgba(var(--accent-rgb), 0.4);
+  background: var(--surface-2);
+  transform: translateY(-2px);
+}
+.contact__social:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   RIGHT — form panel
+   -------------------------------------------------------------------------- */
+.contact__panel {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent),
+    var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.contact__form-head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-3);
+  margin-bottom: var(--sp-1);
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-sm);
+}
+.contact__form-head .term-prompt { letter-spacing: 0.02em; }
+
+.contact__field { width: 100%; }
+
+/* Per-field inline error message (created by JS, linked via aria-describedby) */
+.contact__field-err {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--danger);
+}
+.contact__field-err:empty { display: none; }
+
+/* Invalid field cue (set by JS via aria-invalid) */
+.contact__field input[aria-invalid="true"],
+.contact__field textarea[aria-invalid="true"] {
+  border-color: var(--danger);
+  background: rgba(var(--accent-rgb), 0);
+}
+.contact__field input[aria-invalid="true"] + label,
+.contact__field textarea[aria-invalid="true"] + label {
+  color: var(--danger);
+}
+
+.contact__submit {
+  align-self: flex-start;
+  margin-top: var(--sp-1);
+}
+.contact__submit[disabled] {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+/* --------------------------------------------------------------------------
+   Status terminal box — mono, term-* colors
+   -------------------------------------------------------------------------- */
+.contact__status {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 1.2vw, 0.9rem);
+  line-height: 1.75;
+  color: var(--text-dim);
+}
+.contact__status.is-visible {
+  display: block;
+  margin-top: var(--sp-1);
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-2);
+}
+.contact__status .contact__line { display: block; }
+.contact__status .contact__line + .contact__line { margin-top: 0.15rem; }
+
+/* Error variant tints the box border */
+.contact__status.is-error {
+  border-color: rgba(251, 113, 133, 0.45); /* --danger fallback (no color-mix) */
+  border-color: color-mix(in srgb, var(--danger) 45%, transparent);
+}
+.contact__status.is-ok {
+  border-color: rgba(var(--term-rgb), 0.4);
+  background: rgba(var(--term-rgb), 0.05);
+}
+
+/* Caret used during the typewriter sequence */
+.contact__status .caret { height: 0.95em; }
+
+/* --------------------------------------------------------------------------
+   Reduced motion — nothing custom loops here, but keep submit calm
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .contact__social:hover,
+  .contact__social:focus-visible { transform: none; }
+  .contact__status .caret { animation: none; opacity: 1; }
+}

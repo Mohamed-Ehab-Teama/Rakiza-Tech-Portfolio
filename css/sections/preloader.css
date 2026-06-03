@@ -1,0 +1,162 @@
+/* ==========================================================================
+   preloader.css — full-screen terminal BOOT sequence overlay
+   Covers the viewport on first paint (no-JS safe) and is dismissed by JS.
+   All custom selectors are scoped with the .preloader__ prefix.
+   ========================================================================== */
+
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-preloader, 100);
+  display: grid;
+  place-items: center;
+  padding: var(--gutter);
+  background: var(--bg);
+  /* Subtle depth so the bare background never looks flat */
+  background-image:
+    radial-gradient(120% 90% at 50% -10%, rgba(var(--accent-rgb), 0.07), transparent 60%),
+    radial-gradient(90% 80% at 50% 120%, rgba(var(--accent2-rgb), 0.06), transparent 60%);
+  overflow: hidden;
+}
+
+/* Once the page has loaded, ensure the overlay can never block input even
+   if a JS hiccup left it in the DOM. JS sets display:none on success. */
+body.loaded .preloader { pointer-events: none; }
+
+/* --------------------------------------------------------------------------
+   Curtain panels — absolutely cover the screen, slide up on exit
+   -------------------------------------------------------------------------- */
+.preloader__curtains {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  pointer-events: none;
+}
+.preloader__curtains > span {
+  display: block;
+  height: 100%;
+  background: var(--bg-2);
+  border-right: 1px solid rgba(255, 255, 255, 0.02);
+  will-change: transform;
+}
+.preloader__curtains > span:last-child { border-right: 0; }
+
+/* --------------------------------------------------------------------------
+   Centered content
+   -------------------------------------------------------------------------- */
+.preloader__inner {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  will-change: transform, opacity;
+}
+
+.preloader__window {
+  width: 100%;
+  box-shadow:
+    0 40px 90px -40px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(var(--accent-rgb), 0.06);
+}
+
+/* --------------------------------------------------------------------------
+   Boot log
+   -------------------------------------------------------------------------- */
+.preloader__log {
+  min-height: 11.5em;            /* reserve space so curtains/bar don't jump */
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.preloader__line { margin: 0; color: var(--text-dim); }
+.preloader__line + .preloader__line { margin-top: 0.15em; }
+.preloader__line .term-prompt { margin-right: 0.5ch; }
+
+/* The trailing typing caret appended by JS */
+.preloader__cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: var(--accent);
+  animation: preloader-blink 1s steps(1) infinite;
+}
+@keyframes preloader-blink { 50% { opacity: 0; } }
+
+/* --------------------------------------------------------------------------
+   Meter: LOADING label + percentage + progress bar
+   -------------------------------------------------------------------------- */
+.preloader__meter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.preloader__meter-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+.preloader__label {
+  font-size: var(--fs-mono);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  align-self: center;
+}
+.preloader__count {
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.preloader__count::after {
+  content: "%";
+  margin-left: 0.06em;
+  font-size: 0.42em;
+  vertical-align: super;
+  color: var(--accent);
+}
+
+.preloader__bar {
+  position: relative;
+  height: 2px;
+  width: 100%;
+  border-radius: var(--r-full);
+  background: var(--border);
+  overflow: hidden;
+}
+.preloader__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  border-radius: inherit;
+  background: var(--grad);
+  box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.5);
+  will-change: width;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 560px) {
+  .preloader__inner { gap: var(--sp-5); }
+  .preloader__log { min-height: 12.5em; }
+  .preloader__label { letter-spacing: 0.3em; }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion — no curtain / caret animation; show a calm final state.
+   JS also hides the overlay immediately, but guard the visuals regardless.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .preloader__cursor { animation: none; }
+  .preloader__fill { box-shadow: none; }
+}

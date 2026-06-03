@@ -1,0 +1,557 @@
+/* ==========================================================================
+   projects.css — #work : signature horizontal-scroll showcase
+   Pinned GSAP horizontal track on desktop; native vertical/scroll fallback
+   on small screens & reduced motion. All selectors scoped with .work__*
+   ========================================================================== */
+
+.work {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Huge faint background index */
+.work__ghost {
+  top: clamp(2rem, 6vh, 5rem);
+  right: clamp(-1rem, 2vw, 3rem);
+}
+
+/* --------------------------------------------------------------------------
+   Head — title + intro + progress meta
+   -------------------------------------------------------------------------- */
+.work__head-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-6);
+}
+
+.work__head {
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  max-width: 720px;
+}
+
+.work__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+
+.work__progress {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-family: var(--font-display);
+  line-height: 1;
+}
+.work__progress-cur {
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 600;
+  color: var(--text);
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.work__progress-sep,
+.work__progress-total {
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  color: var(--text-faint);
+}
+
+.work__hint {
+  font-size: var(--fs-sm);
+  color: var(--text-faint);
+  letter-spacing: 0.04em;
+}
+.work__hint-touch { display: none; }
+
+/* --------------------------------------------------------------------------
+   Viewport + track
+   -------------------------------------------------------------------------- */
+.work__viewport {
+  position: relative;
+  /* fallback: native horizontal scroll strip (used until JS upgrades it) */
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-block: var(--sp-2);
+}
+.work__viewport::-webkit-scrollbar { display: none; }
+
+.work__track {
+  display: flex;
+  align-items: stretch;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  width: max-content;
+  padding-inline: var(--gutter, clamp(1rem, 5vw, 4rem));
+  will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
+   Card
+   -------------------------------------------------------------------------- */
+.work__item {
+  flex: 0 0 auto;
+  width: clamp(300px, 78vw, 560px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.1rem, 2vw, 1.6rem);
+  padding: clamp(1.25rem, 2.4vw, 1.75rem);
+}
+.work__item:hover { transform: translateY(-4px); }
+
+.work__visual {
+  position: relative;
+  aspect-ratio: 16 / 11;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background:
+    radial-gradient(120% 120% at 80% -10%, rgba(var(--accent2-rgb), 0.18), transparent 55%),
+    radial-gradient(120% 120% at 0% 110%, rgba(var(--accent-rgb), 0.16), transparent 55%),
+    var(--surface-2);
+  isolation: isolate;
+}
+.work__visual::after {
+  /* subtle top sheen */
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent 40%);
+  pointer-events: none;
+}
+
+.work__mock {
+  position: absolute;
+  inset: clamp(0.85rem, 2vw, 1.4rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  will-change: transform;
+}
+
+.work__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  flex: 1;
+}
+
+.work__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+.work__num {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-faint);
+}
+.work__year {
+  font-size: var(--fs-sm);
+  color: var(--text-faint);
+  letter-spacing: 0.06em;
+}
+
+.work__name {
+  font-size: var(--fs-h3);
+  font-family: var(--font-display);
+  line-height: 1.05;
+  color: var(--text);
+}
+.work__role {
+  font-size: var(--fs-body);
+  color: var(--text-dim);
+  margin-top: -0.3rem;
+}
+
+.work__tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.1rem 0 0;
+  padding: 0;
+}
+
+.work__link {
+  margin-top: auto;
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text);
+}
+.work__link span { transition: transform var(--dur-1) var(--ease-out); display: inline-block; }
+.work__link:hover span { transform: translateX(4px); }
+
+/* --------------------------------------------------------------------------
+   "View all" trailing card
+   -------------------------------------------------------------------------- */
+.work__more {
+  flex: 0 0 auto;
+  align-self: stretch;
+  width: clamp(220px, 32vw, 300px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--sp-3);
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-lg);
+  background: var(--grad-soft);
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color var(--dur-2) var(--ease-out),
+              background var(--dur-2) var(--ease-out),
+              transform var(--dur-2) var(--ease-out);
+}
+.work__more:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+}
+.work__more-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+}
+.work__more-arrow { transition: transform var(--dur-1) var(--ease-out); }
+.work__more:hover .work__more-arrow { transform: translateX(6px); }
+.work__more-sub { font-size: var(--fs-sm); color: var(--text-dim); }
+
+/* ==========================================================================
+   MOCK VISUALS
+   ========================================================================== */
+
+/* --- Dashboard (01) ----------------------------------------------------- */
+.work__dash-bar {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+}
+.work__dash-tab {
+  padding: 0.22em 0.6em;
+  border-radius: var(--r-full);
+  border: 1px solid var(--border);
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+.work__dash-tab.is-active {
+  color: var(--accent);
+  border-color: rgba(var(--accent-rgb), 0.4);
+  background: rgba(var(--accent-rgb), 0.1);
+}
+.work__dash-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+.work__kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+}
+.work__kpi-label { font-size: 0.56rem; color: var(--text-faint); letter-spacing: 0.06em; text-transform: uppercase; }
+.work__kpi-val   { font-size: 0.92rem; color: var(--text); font-weight: 600; }
+.work__kpi-delta { font-size: 0.56rem; }
+.work__kpi-delta--up { color: var(--term); }
+.work__kpi-delta--dn { color: var(--warn, var(--accent-2)); }
+.work__chart {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+}
+.work__chart-area { opacity: 0.9; }
+.work__chart-line {
+  stroke: var(--accent);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 2px 8px rgba(var(--accent-rgb), 0.4));
+}
+
+/* --- Storefront (02) ---------------------------------------------------- */
+.work__mock--store { gap: 0.5rem; }
+.work__store-hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.2rem 0.6rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: var(--r-sm);
+  background: var(--grad);
+  color: #06121a;
+}
+.work__store-eyebrow { grid-column: 1; font-size: 0.52rem; letter-spacing: 0.12em; opacity: 0.75; }
+.work__store-title   { grid-column: 1; font-size: 0.9rem; font-weight: 700; }
+.work__store-price   { grid-column: 2; grid-row: 1 / span 2; font-size: 1.1rem; font-weight: 700; align-self: center; }
+.work__store-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+  flex: 1;
+}
+.work__store-card {
+  border-radius: var(--r-sm);
+  background: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+  border: 1px solid var(--border);
+}
+.work__store-cart {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  font-size: 0.6rem;
+}
+.work__store-cart-label { color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; }
+.work__store-cart-total { color: var(--text); font-weight: 600; margin-left: auto; }
+.work__store-cart-btn {
+  padding: 0.2em 0.6em;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  color: #06121a;
+  font-weight: 600;
+}
+
+/* --- Kanban (03) -------------------------------------------------------- */
+.work__mock--kanban {
+  flex-direction: row;
+  gap: 0.5rem;
+}
+.work__kan-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.5rem;
+  border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.025);
+  border: 1px solid var(--border);
+}
+.work__kan-head {
+  font-size: 0.56rem;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.work__kan-card {
+  height: 1.6rem;
+  border-radius: var(--r-sm);
+  background: linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  border: 1px solid var(--border);
+}
+.work__kan-card--tall { height: 2.6rem; }
+.work__kan-card--accent {
+  background: rgba(var(--accent-rgb), 0.16);
+  border-color: rgba(var(--accent-rgb), 0.4);
+}
+.work__kan-card--done {
+  background: rgba(var(--term-rgb), 0.14);
+  border-color: rgba(var(--term-rgb), 0.4);
+}
+
+/* --- Terminal (04) ------------------------------------------------------ */
+.work__mock--term {
+  inset: 0;
+  gap: 0;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: rgba(8, 9, 13, 0.7);
+}
+.work__term-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+}
+.work__term-dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--text-faint); }
+.work__term-dot--r { background: #ff5f57; }
+.work__term-dot--y { background: #febc2e; }
+.work__term-dot--g { background: #28c840; }
+.work__term-name { margin-left: 0.4rem; font-size: 0.58rem; color: var(--text-faint); }
+.work__term-body {
+  margin: 0;
+  padding: 0.7rem 0.85rem;
+  font-size: 0.66rem;
+  line-height: 1.55;
+  color: var(--text-dim);
+  white-space: pre-wrap;
+}
+.work__term-line { display: block; }
+.work__p  { color: var(--term); }
+.work__o  { color: var(--text-faint); }
+.work__ok { color: var(--term); }
+.work__cur {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.95em;
+  vertical-align: -0.12em;
+  background: var(--accent);
+  animation: work-blink 1s steps(2, start) infinite;
+}
+@keyframes work-blink { 50% { opacity: 0; } }
+
+/* --- Map / fleet (05) --------------------------------------------------- */
+.work__mock--map { inset: 0; }
+.work__map-grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.work__map-lines line { stroke: var(--border); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.work__map-route {
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 1px 6px rgba(var(--accent-rgb), 0.45));
+}
+.work__map-pin {
+  position: absolute;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.2);
+}
+.work__map-pin::after {
+  content: "";
+  position: absolute; inset: -6px;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--accent-rgb), 0.5);
+  animation: work-ping 2.4s var(--ease-out) infinite;
+}
+.work__map-pin--1 { left: 12%; top: 78%; }
+.work__map-pin--2 { left: 50%; top: 42%; background: var(--accent-2); box-shadow: 0 0 0 4px rgba(var(--accent2-rgb), 0.2); }
+.work__map-pin--2::after { border-color: rgba(var(--accent2-rgb), 0.5); animation-delay: 0.8s; }
+.work__map-pin--3 { left: 88%; top: 20%; background: var(--term); box-shadow: 0 0 0 4px rgba(var(--term-rgb), 0.2); }
+.work__map-pin--3::after { border-color: rgba(var(--term-rgb), 0.5); animation-delay: 1.6s; }
+@keyframes work-ping {
+  0%   { transform: scale(0.6); opacity: 0.9; }
+  70%, 100% { transform: scale(2.2); opacity: 0; }
+}
+.work__map-chip {
+  position: absolute;
+  left: 0.8rem; bottom: 0.8rem;
+  padding: 0.25em 0.65em;
+  font-size: 0.6rem;
+  border-radius: var(--r-full);
+  background: rgba(8, 9, 13, 0.7);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
+   DESKTOP (pinned horizontal scroll active) — JS adds .is-pinned
+   ========================================================================== */
+@media (min-width: 860px) {
+  /* Full-viewport pinned stage so the ENTIRE card (visual + title + role +
+     tags + link) stays visible while the track scrolls horizontally. The
+     section is exactly one screen tall; padding-top clears the fixed nav. */
+  .work {
+    height: 100vh;
+    min-height: 560px;
+    padding-block: clamp(5rem, 10vh, 7.5rem) clamp(1.5rem, 4vh, 3rem);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .work__head-wrap { flex: 0 0 auto; margin-bottom: clamp(1rem, 3vh, 2.25rem); }
+  .work__head { margin-bottom: 0; }
+  .work__meta { margin-bottom: 0; }
+
+  /* The horizontal band fills the remaining height; cards are centred in it. */
+  .work__viewport {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding-block: 0;
+    display: flex;
+    align-items: center;
+    overflow: hidden;                 /* pinned: GSAP translates the track */
+  }
+  /* No pin (no-JS / reduced motion) → keep native horizontal scrolling. */
+  .work:not(.is-pinned) .work__viewport { overflow-x: auto; overflow-y: hidden; }
+
+  .work__track {
+    align-items: stretch;
+    height: min(540px, 100%);         /* the card band; never taller than the viewport */
+  }
+
+  /* Card fills the band; the visual flexes so the body is never clipped. */
+  .work__item {
+    height: 100%;
+    width: clamp(320px, 44vw, 500px);
+    gap: clamp(0.85rem, 1.5vw, 1.25rem);
+  }
+  .work__visual {
+    aspect-ratio: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+  .work__body { flex: 0 0 auto; }
+
+  .work__more { height: 100%; }
+}
+
+/* ==========================================================================
+   SMALL SCREENS / fallback — vertical stack, no pin
+   ========================================================================== */
+@media (max-width: 859.98px) {
+  .work__hint-desk { display: none; }
+  .work__hint-touch { display: inline; }
+
+  .work__head-wrap { flex-direction: column; align-items: flex-start; }
+  .work__meta { flex-direction: row; align-items: center; gap: var(--sp-4); }
+
+  /* keep a swipeable horizontal strip on tablets, stack on phones */
+  .work__track {
+    width: max-content;
+    padding-inline: var(--gutter, clamp(1rem, 5vw, 2rem));
+  }
+}
+
+@media (max-width: 600px) {
+  .work__viewport {
+    overflow: visible;
+  }
+  .work__track {
+    flex-direction: column;
+    width: auto;
+    align-items: stretch;
+    padding-inline: 0;
+  }
+  .work__item { width: auto; }
+  .work__more { width: auto; }
+  .work__meta { flex-direction: row; }
+}
+
+/* ==========================================================================
+   Reduced motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .work__cur,
+  .work__map-pin::after { animation: none; }
+  .work__item:hover,
+  .work__more:hover { transform: none; }
+}
