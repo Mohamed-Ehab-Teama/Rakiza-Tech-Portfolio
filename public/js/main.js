@@ -7,7 +7,6 @@
 import { initSmoothScroll, getLenis, stopScroll, startScroll } from "./core/smooth-scroll.js";
 import { initCursor } from "./core/cursor.js";
 import { initBrand } from "./core/brand.js";
-import { loadIncludes } from "./core/include.js";
 import { initReveals, initCounters } from "./core/reveal.js";
 import { prefersReducedMotion } from "./core/utils.js";
 
@@ -77,15 +76,10 @@ function boot() {
   setTimeout(refresh, 1200);
 }
 
-// Pull the html/<section>.html partials into their placeholders, THEN boot so
-// every section module finds its DOM. The inline preloader covers the load.
-async function start() {
-  await loadIncludes();
-  boot();
-}
-
+// Laravel (Blade) renders every section on the server, so the full page is
+// already in the HTML when this module runs — boot straight away.
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", start);
+  document.addEventListener("DOMContentLoaded", boot);
 } else {
-  start();
+  boot();
 }
