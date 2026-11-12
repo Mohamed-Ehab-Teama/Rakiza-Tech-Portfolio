@@ -1,6 +1,6 @@
 /* ==========================================================================
-   base.css — design tokens, reset, typography, layout primitives, a11y
-   Developer portfolio · premium dark "IDE/terminal" aesthetic
+   base.css — design tokens, color themes, reset, typography, layout, a11y
+   Rakiza Tech · premium "IDE/terminal" aesthetic
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -34,6 +34,19 @@
   --accent-rgb:  110, 231, 255;
   --accent2-rgb: 167, 139, 250;
   --term-rgb:    74, 222, 128;
+  --danger-rgb:  251, 113, 133;
+
+  /* Theme helpers — every theme below redefines these too */
+  --bg-rgb:      8, 9, 13;       /* --bg as r,g,b (for see-through overlays)    */
+  --tint-rgb:    255, 255, 255;  /* subtle tints/lines: white on dark themes   */
+  --shadow-rgb:  0, 0, 0;        /* drop-shadow color                          */
+  --shadow-a:    1;              /* shadow strength (lighter on light themes)  */
+  --on-accent:   #06121a;        /* text on top of an accent-colored button    */
+  --term-bg-1:   #0c0e15;        /* terminal window background (top → bottom) */
+  --term-bg-2:   #090a10;
+  --grain-opacity: 0.04;         /* film-grain overlay strength                */
+  --ghost-a:     0.022;          /* big faded section numbers in backgrounds   */
+  --scrollbar-hover: #2a3040;
 
   /* Gradients */
   --grad: linear-gradient(135deg, var(--accent), var(--accent-2));
@@ -99,6 +112,94 @@
   --z-cursor: 90;
   --z-preloader: 100;
 
+  color-scheme: dark;
+}
+
+/* --------------------------------------------------------------------------
+   Color themes
+   :root above is the default "dark" theme. Each block below re-defines only
+   the colors; spacing, fonts and motion are shared. The active theme is the
+   data-theme attribute on <html>, set by partials/theme-init + js/core/theme.js.
+   The list of themes (labels, menu swatches) is config/themes.php.
+   -------------------------------------------------------------------------- */
+
+/* Light — bright and clean */
+:root[data-theme="light"] {
+  --bg: #f6f7fb;  --bg-2: #eef0f6;
+  --surface: #ffffff;  --surface-2: #f3f4f8;  --surface-3: #e7e9f1;
+  --border: rgba(15, 23, 42, 0.10);
+  --border-strong: rgba(15, 23, 42, 0.18);
+  --text: #0f172a;  --text-dim: #475069;  --text-faint: #5d6680;
+  --accent: #0e7490;  --accent-2: #6d28d9;  --term: #15803d;
+  --warn: #b45309;  --pink: #be185d;  --danger: #be123c;
+  --accent-rgb: 14, 116, 144;  --accent2-rgb: 109, 40, 217;
+  --term-rgb: 21, 128, 61;  --danger-rgb: 190, 18, 60;
+  --bg-rgb: 246, 247, 251;  --tint-rgb: 15, 23, 42;
+  --shadow-rgb: 15, 23, 42;  --shadow-a: 0.18;
+  --on-accent: #ffffff;
+  --term-bg-1: #ffffff;  --term-bg-2: #f7f8fb;
+  --grain-opacity: 0.025;  --ghost-a: 0.045;
+  --scrollbar-hover: #c5cad6;
+  color-scheme: light;
+}
+
+/* Dim — a softer, lower-contrast dark that is easier on the eyes */
+:root[data-theme="dim"] {
+  --bg: #1b1e25;  --bg-2: #1f232b;
+  --surface: #242832;  --surface-2: #2a2f3a;  --surface-3: #323845;
+  --border: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.13);
+  --text: #cfd3dc;  --text-dim: #a2a8b5;  --text-faint: #8c93a1;
+  --accent: #7cc4d6;  --accent-2: #b0a2dc;  --term: #86c79c;
+  --warn: #d9b46c;  --pink: #d59bbd;  --danger: #e3919b;
+  --accent-rgb: 124, 196, 214;  --accent2-rgb: 176, 162, 220;
+  --term-rgb: 134, 199, 156;  --danger-rgb: 227, 145, 155;
+  --bg-rgb: 27, 30, 37;  --tint-rgb: 255, 255, 255;
+  --shadow-rgb: 0, 0, 0;  --shadow-a: 0.55;
+  --on-accent: #12161c;
+  --term-bg-1: #20242c;  --term-bg-2: #1c1f26;
+  --grain-opacity: 0.03;  --ghost-a: 0.025;
+  --scrollbar-hover: #3d4452;
+  color-scheme: dark;
+}
+
+/* Sepia — warm paper tones with less blue light (good for night reading) */
+:root[data-theme="sepia"] {
+  --bg: #f4ecd8;  --bg-2: #efe4ca;
+  --surface: #fbf6ea;  --surface-2: #f3ead6;  --surface-3: #e9ddc2;
+  --border: rgba(70, 52, 30, 0.14);
+  --border-strong: rgba(70, 52, 30, 0.24);
+  --text: #3a2e21;  --text-dim: #5b4a37;  --text-faint: #6e5c46;
+  --accent: #8a4f0f;  --accent-2: #7a3b62;  --term: #4a6b1f;
+  --warn: #8f5a00;  --pink: #9b3466;  --danger: #a8243b;
+  --accent-rgb: 138, 79, 15;  --accent2-rgb: 122, 59, 98;
+  --term-rgb: 74, 107, 31;  --danger-rgb: 168, 36, 59;
+  --bg-rgb: 244, 236, 216;  --tint-rgb: 70, 52, 30;
+  --shadow-rgb: 70, 52, 30;  --shadow-a: 0.18;
+  --on-accent: #fffaf0;
+  --term-bg-1: #fbf6ea;  --term-bg-2: #f5edda;
+  --grain-opacity: 0.05;  --ghost-a: 0.05;
+  --scrollbar-hover: #cdbd9c;
+  color-scheme: light;
+}
+
+/* Rakiza — the brand: deep forest green with gold, like the logo */
+:root[data-theme="rakiza"] {
+  --bg: #06120d;  --bg-2: #0a1913;
+  --surface: #0e2018;  --surface-2: #13281f;  --surface-3: #1a3328;
+  --border: rgba(217, 178, 90, 0.12);
+  --border-strong: rgba(217, 178, 90, 0.22);
+  --text: #ecf3ec;  --text-dim: #a9bcaf;  --text-faint: #8ba595;
+  --accent: #d9b25a;  --accent-2: #4cc38a;  --term: #6fd39b;
+  --warn: #f0c75e;  --pink: #e7a86b;  --danger: #f08a80;
+  --accent-rgb: 217, 178, 90;  --accent2-rgb: 76, 195, 138;
+  --term-rgb: 111, 211, 155;  --danger-rgb: 240, 138, 128;
+  --bg-rgb: 6, 18, 13;  --tint-rgb: 236, 243, 236;
+  --shadow-rgb: 0, 0, 0;  --shadow-a: 1;
+  --on-accent: #1a1407;
+  --term-bg-1: #0b1c15;  --term-bg-2: #08150f;
+  --grain-opacity: 0.04;  --ghost-a: 0.025;
+  --scrollbar-hover: #24463a;
   color-scheme: dark;
 }
 
@@ -180,7 +281,7 @@ strong, b { color: var(--text); font-weight: 600; }
   color: transparent;
 }
 
-::selection { background: rgba(var(--accent-rgb), 0.28); color: #fff; }
+::selection { background: rgba(var(--accent-rgb), 0.28); color: var(--text); }
 
 /* --------------------------------------------------------------------------
    Layout primitives
@@ -246,7 +347,7 @@ strong, b { color: var(--text); font-weight: 600; }
   border-radius: 999px;
   border: 2px solid var(--bg);
 }
-::-webkit-scrollbar-thumb:hover { background: #2a3040; }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-hover); }
 
 /* --------------------------------------------------------------------------
    Accessibility — reduced motion

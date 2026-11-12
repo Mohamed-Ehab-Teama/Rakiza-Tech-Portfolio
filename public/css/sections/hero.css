@@ -34,8 +34,8 @@
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(120% 90% at 30% 50%, transparent 40%, rgba(8, 9, 13, 0.55) 100%),
-    linear-gradient(180deg, rgba(8, 9, 13, 0.35), transparent 22%, transparent 78%, rgba(8, 9, 13, 0.55));
+    radial-gradient(120% 90% at 30% 50%, transparent 40%, rgba(var(--bg-rgb), 0.55) 100%),
+    linear-gradient(180deg, rgba(var(--bg-rgb), 0.35), transparent 22%, transparent 78%, rgba(var(--bg-rgb), 0.55));
 }
 
 /* --- Content ------------------------------------------------------------- */

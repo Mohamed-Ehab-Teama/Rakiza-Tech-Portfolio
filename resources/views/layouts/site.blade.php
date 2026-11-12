@@ -11,15 +11,17 @@
     Blade comments (like this block) are removed on the server and never
     reach the browser. Normal HTML comments are sent to the browser as usual.
 --}}
+@php($defaultTheme = config('themes.default'))
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="{{ $defaultTheme === 'system' ? 'dark' : $defaultTheme }}" data-theme-default="{{ $defaultTheme }}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @include('partials.theme-init')
     <title>Rakiza Tech — Digital Solutions: Websites, Systems &amp; Apps</title>
     <meta name="description" content="Rakiza Tech is a digital solutions company from Egypt. We build websites, systems and apps end to end: databases, APIs, and the screens on top." />
     <meta name="author" content="Rakiza Tech" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="dark light" />
     <meta name="theme-color" content="#08090d" />
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/brand/favicon-32.png') }}" />
     <link rel="apple-touch-icon" href="{{ asset('assets/brand/apple-touch-icon.png') }}" />

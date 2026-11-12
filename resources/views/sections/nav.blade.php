@@ -15,6 +15,7 @@
         </nav>
 
         <div class="nav__actions">
+          @include('partials.theme-switch')
           <a href="#contact" class="btn btn--primary nav__cta" data-magnetic="0.3">Let's talk</a>
           <button
             type="button"

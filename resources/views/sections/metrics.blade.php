@@ -121,8 +121,8 @@
                      aria-label="Area chart showing performance score climbing from the low nineties to ninety-nine.">
                   <defs>
                     <linearGradient id="metricsAreaFill" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stop-color="rgba(110,231,255,0.28)"></stop>
-                      <stop offset="100%" stop-color="rgba(110,231,255,0)"></stop>
+                      <stop offset="0%" style="stop-color: rgba(var(--accent-rgb), 0.28)"></stop>
+                      <stop offset="100%" style="stop-color: rgba(var(--accent-rgb), 0)"></stop>
                     </linearGradient>
                   </defs>
                   <!-- gridlines -->

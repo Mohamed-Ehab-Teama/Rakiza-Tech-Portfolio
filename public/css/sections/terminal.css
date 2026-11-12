@@ -32,8 +32,8 @@
   margin-inline: auto;
   margin-top: var(--sp-8);
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.03) inset,
-    0 30px 80px -40px rgba(0, 0, 0, 0.8);
+    0 1px 0 rgba(var(--tint-rgb), 0.03) inset,
+    0 30px 80px -40px rgba(var(--shadow-rgb), calc(0.8 * var(--shadow-a)));
 }
 
 /* The window is one big click target that focuses the input. */

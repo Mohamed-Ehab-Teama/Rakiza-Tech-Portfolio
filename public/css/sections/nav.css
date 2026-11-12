@@ -27,7 +27,7 @@
 
 /* --- Scrolled / hidden states ------------------------------------------- */
 .nav--scrolled {
-  background: rgba(8, 9, 13, 0.7);
+  background: rgba(var(--bg-rgb), 0.7);
   -webkit-backdrop-filter: blur(12px);
           backdrop-filter: blur(12px);
   border-bottom-color: var(--border);
@@ -129,7 +129,7 @@
   justify-content: center;
   border: 1px solid var(--border);
   border-radius: var(--r-full);
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--tint-rgb), 0.02);
   transition: border-color var(--dur-1) var(--ease-out),
               background var(--dur-1) var(--ease-out);
   z-index: 2;

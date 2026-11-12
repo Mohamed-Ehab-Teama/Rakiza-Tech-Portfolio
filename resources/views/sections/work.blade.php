@@ -44,8 +44,8 @@
                   <svg class="work__chart" viewBox="0 0 320 120" preserveAspectRatio="none" role="presentation">
                     <defs>
                       <linearGradient id="workFill1" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="rgba(110,231,255,0.34)"/>
-                        <stop offset="100%" stop-color="rgba(110,231,255,0)"/>
+                        <stop offset="0%" style="stop-color: rgba(var(--accent-rgb), 0.34)"/>
+                        <stop offset="100%" style="stop-color: rgba(var(--accent-rgb), 0)"/>
                       </linearGradient>
                     </defs>
                     <path class="work__chart-area" d="M0,96 L0,82 C30,70 50,86 80,64 C112,40 132,58 162,44 C196,28 214,46 246,30 C276,16 296,30 320,18 L320,120 L0,120 Z" fill="url(#workFill1)"/>

@@ -7,6 +7,7 @@
 import { initSmoothScroll, getLenis, stopScroll, startScroll } from "./core/smooth-scroll.js";
 import { initCursor } from "./core/cursor.js";
 import { initBrand } from "./core/brand.js";
+import { initTheme } from "./core/theme.js";
 import { initReveals, initCounters } from "./core/reveal.js";
 import { prefersReducedMotion } from "./core/utils.js";
 
@@ -25,6 +26,9 @@ import { init as initPreloader } from "./sections/preloader.js";
 document.documentElement.classList.add("js");
 
 function boot() {
+  // Theme menu first: it needs no libraries and should work even if GSAP fails.
+  try { initTheme(); } catch (err) { console.error("[theme]", err); }
+
   const gsap = window.gsap;
   const ScrollTrigger = window.ScrollTrigger;
   if (gsap && ScrollTrigger) {

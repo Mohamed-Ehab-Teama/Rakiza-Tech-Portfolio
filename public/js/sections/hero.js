@@ -112,8 +112,16 @@ function startCodeRain(canvas, reduced) {
   let drops = [];
   let fontSize = 16;
 
-  const accent = "110, 231, 255";   // --accent
-  const term = "74, 222, 128";      // --term
+  // Glyph colors come from the active theme (--accent-rgb / --term-rgb) and the
+  // trail fade uses the page background (--bg-rgb); re-read on "themechange".
+  let accent = "", term = "", bgRgb = "";
+  const readColors = () => {
+    const css = getComputedStyle(document.documentElement);
+    accent = css.getPropertyValue("--accent-rgb").trim() || "110, 231, 255";
+    term = css.getPropertyValue("--term-rgb").trim() || "74, 222, 128";
+    bgRgb = css.getPropertyValue("--bg-rgb").trim() || "8, 9, 13";
+  };
+  readColors();
 
   const resize = () => {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -160,6 +168,7 @@ function startCodeRain(canvas, reduced) {
       clearTimeout(rT);
       rT = setTimeout(() => { resize(); paintStatic(); }, 200);
     });
+    window.addEventListener("themechange", () => { readColors(); resize(); paintStatic(); });
     return;
   }
 
@@ -176,7 +185,7 @@ function startCodeRain(canvas, reduced) {
     last = now;
 
     // Fade the previous frame for trailing tails.
-    ctx.fillStyle = "rgba(8, 9, 13, 0.16)";
+    ctx.fillStyle = `rgba(${bgRgb}, 0.16)`;
     ctx.fillRect(0, 0, w, h);
 
     ctx.font = `${fontSize}px "JetBrains Mono", monospace`;
@@ -223,6 +232,13 @@ function startCodeRain(canvas, reduced) {
   window.addEventListener("resize", () => {
     clearTimeout(resizeT);
     resizeT = setTimeout(resize, 180);
+  });
+
+  // New theme: pick up its colors and wipe the old-colored trails at once.
+  window.addEventListener("themechange", () => {
+    readColors();
+    ctx.clearRect(0, 0, w, h);
+    drops.forEach((d) => { d.tint = Math.random() < 0.22 ? term : accent; });
   });
 }
 

@@ -107,7 +107,7 @@
 .contact__panel {
   position: relative;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent),
+    linear-gradient(180deg, rgba(var(--tint-rgb), 0.02), transparent),
     var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
@@ -186,7 +186,7 @@
 
 /* Error variant tints the box border */
 .contact__status.is-error {
-  border-color: rgba(251, 113, 133, 0.45); /* --danger fallback (no color-mix) */
+  border-color: rgba(var(--danger-rgb), 0.45);
   border-color: color-mix(in srgb, var(--danger) 45%, transparent);
 }
 .contact__status.is-ok {
