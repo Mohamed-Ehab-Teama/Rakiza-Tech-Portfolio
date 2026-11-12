@@ -300,6 +300,23 @@ Tests use SQLite in memory (`phpunit.xml`), `RefreshDatabase`, fake storage/mail
 
 Code style: `vendor/bin/pint`.
 
+### Real-browser check
+
+PHPUnit cannot see animations, so `tests/browser/check-page.mjs` opens the running site in headless Chrome / Edge / Chromium (no packages to install; needs Node 22+) at a desktop and a phone size and checks that:
+
+- nothing stays invisible — reveal animations, heading words and count-up numbers — after scrolling with the mouse wheel, pressing **End**, or **reloading half-way down** the page;
+- `/projects` and a project page render;
+- there are no JavaScript errors, console errors or failed requests.
+
+```bash
+php artisan serve                                  # in one terminal
+node tests/browser/check-page.mjs                  # in another (default http://127.0.0.1:8000)
+node tests/browser/check-page.mjs http://rakiza-tech-landing-page.test
+BROWSER="/path/to/chrome" node tests/browser/check-page.mjs   # if the browser is not found
+```
+
+It prints ✔ / ✘ per check and exits with code 1 when something fails. Run it after changing anything in `public/js` or the section views. (Do not run it with the browser pane of an IDE hidden in the background: hidden pages get no animation frames, so animations cannot finish there — the script uses its own headless browser for that reason.)
+
 ---
 
 ## 13. Deployment

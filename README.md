@@ -34,7 +34,8 @@ Locked out? `php artisan rakiza:make-admin you@example.com` creates or resets a 
 ## ✅ Tests
 
 ```bash
-php artisan test
+php artisan test                      # 88 server-side tests (PHPUnit)
+node tests/browser/check-page.mjs     # real-browser check (site must be running)
 ```
 
 ## 🗂 Where things are
