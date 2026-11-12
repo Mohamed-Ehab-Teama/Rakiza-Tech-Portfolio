@@ -13,6 +13,13 @@
   @section('og_image', $project->cover_url)
 @endif
 
+@if ($isPreview)
+  {{-- Draft previews are only for the team: keep them out of search engines. --}}
+  @push('head')
+    <meta name="robots" content="noindex, nofollow" />
+  @endpush
+@endif
+
 @push('jsonld')
   @php
       $creativeWork = array_filter([

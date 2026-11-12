@@ -9,7 +9,7 @@
     <header class="nav" id="nav">
       <div class="nav__inner container container--wide">
         <a href="{{ $base }}#hero" class="nav__logo mono" aria-label="{{ setting('site_name') }} — back to top">
-          <img class="nav__mark" src="{{ asset('assets/brand/rakiza-mark.png') }}" alt="" width="34" height="34" />
+          <img class="nav__mark" src="{{ asset('assets/brand/rakiza-mark-96.png') }}" alt="" width="34" height="34" />
           <span class="brand-type"><span class="nav__brand" data-brand-type data-brand-words="{{ json_encode($brandWords, JSON_UNESCAPED_UNICODE) }}">{{ setting('site_name') }}</span><span class="nav__caret" aria-hidden="true">_</span></span>
         </a>
 

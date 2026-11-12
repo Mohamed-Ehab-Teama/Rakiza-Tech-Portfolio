@@ -17,7 +17,8 @@ trait RecordsActivity
         static::created(fn ($model) => ActivityLog::record('created', $model));
 
         static::updated(function ($model) {
-            $changed = array_keys(Arr::except($model->getChanges(), ['updated_at']));
+            // Bookkeeping columns are not "changes" worth logging.
+            $changed = array_keys(Arr::except($model->getChanges(), ['updated_at', 'remember_token', 'last_login_at']));
             ActivityLog::record('updated', $model, $changed);
         });
 

@@ -53,6 +53,7 @@
     <meta name="twitter:description" content="{!! $metaDescription !!}" />
     <meta name="twitter:image" content="{!! $metaImage !!}" />
 
+    @stack('head')
     @stack('jsonld')
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />

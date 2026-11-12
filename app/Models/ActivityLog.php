@@ -40,7 +40,9 @@ class ActivityLog extends Model
         if (! auth()->check()) {
             return null;
         }
-        if ($action === 'updated' && $changed === []) {
+        // An automatic "updated" event that changed nothing worth showing.
+        // (Entries written by hand always pass a description and are kept.)
+        if ($action === 'updated' && $changed === [] && $description === null) {
             return null;
         }
 

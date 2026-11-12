@@ -23,7 +23,7 @@
 
           <div class="footer__brand-col">
             <a href="{{ $base }}#hero" class="footer__logo mono" aria-label="{{ setting('site_name') }} — back to top">
-              <img class="footer__mark" src="{{ asset('assets/brand/rakiza-mark.png') }}" alt="" width="48" height="48" loading="lazy" />
+              <img class="footer__mark" src="{{ asset('assets/brand/rakiza-mark-96.png') }}" alt="" width="48" height="48" loading="lazy" />
               <span class="brand-type"><span class="footer__brand" data-brand-type data-brand-words="{{ json_encode($brandWords, JSON_UNESCAPED_UNICODE) }}">{{ setting('site_name') }}</span><span class="footer__caret" aria-hidden="true">_</span></span>
             </a>
             @if (setting('footer_tagline'))

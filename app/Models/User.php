@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\RecordsActivity;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -20,7 +21,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasRoles, Notifiable;
+    use HasFactory, HasRoles, Notifiable, RecordsActivity;
 
     protected function casts(): array
     {
@@ -41,6 +42,16 @@ class User extends Authenticatable
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
+    }
+
+    /** Is this the only active Super Admin left? (Then it must stay one.) */
+    public function isLastActiveSuperAdmin(): bool
+    {
+        if (! $this->isSuperAdmin() || ! $this->is_active) {
+            return false;
+        }
+
+        return static::role(config('access.super_admin'))->active()->whereKeyNot($this->getKey())->doesntExist();
     }
 
     /** "Mohamed Ehab" → "ME" (avatar circle in the dashboard). */

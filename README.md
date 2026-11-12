@@ -1,75 +1,53 @@
 # Rakiza Tech — Digital Solutions
 
-The website of **Rakiza Tech** (ركيزة تك), a digital solutions company from Egypt that builds
+The website and dashboard of **Rakiza Tech** (ركيزة تك), a digital solutions company from Egypt that builds
 websites, systems and apps. *Rakiza* (ركيزة) means **pillar / foundation**.
 
-A dark, animated **IDE / terminal / dashboard** style landing page, served by **Laravel 13**.
-The front end is plain **HTML (Blade), CSS and JavaScript** — no front-end framework and
-**no build step**. Animation uses GSAP + ScrollTrigger, Lenis smooth scroll and SplitType (from CDN).
+- **Public website** — an animated one-page landing site in an IDE / terminal style, plus project case-study pages.
+- **Dashboard** (`/admin`) — manage projects, websites, services, skills, numbers, site texts, contact messages,
+  users, roles & permissions, and see an activity log.
+- **Color themes** — System, Dark, Light, Dim, Sepia and the brand theme Rakiza, on the site and in the dashboard.
+- **SEO-ready** — per-page meta tags, Open Graph images, structured data, sitemap and robots.txt.
 
-> 🚧 Work in progress: a database and an admin dashboard (projects, websites, services, skills,
-> users & permissions, themes, SEO) are being added step by step.
+Built with **Laravel 13**, Blade, plain CSS and native JavaScript modules — **no front-end build step**.
 
-## ▶️ Run it locally
+## 📚 Guides
 
-Requirements: PHP 8.3+, Composer, MySQL (Laragon has all three).
+| Guide | For |
+|---|---|
+| [**docs/USER_GUIDE.md**](docs/USER_GUIDE.md) | The people who run the website: everything in the dashboard, step by step. Also available inside the dashboard under *Help & guide*. |
+| [**docs/DEVELOPER_GUIDE.md**](docs/DEVELOPER_GUIDE.md) | Developers: setup, architecture, data model, themes, permissions, testing, deployment, troubleshooting, recipes. |
+
+## ▶️ Quick start
+
+Requirements: PHP 8.3+, Composer, MySQL (Laragon has everything).
 
 ```bash
-composer install
-cp .env.example .env        # then check the DB_* values
-php artisan key:generate
-php artisan migrate
+cp .env.example .env      # set DB_* and ADMIN_EMAIL / ADMIN_PASSWORD
+composer setup            # install, key, migrate, seed, storage:link
+php artisan serve         # http://127.0.0.1:8000  — dashboard at /admin
 ```
 
-Then either:
+If `ADMIN_PASSWORD` is empty, `composer setup` prints a generated password for the first Super Admin.
+Locked out? `php artisan rakiza:make-admin you@example.com` creates or resets a Super Admin.
 
-- **Laragon:** open `http://rakiza-tech-landing-page.test` (the site's document root must be the
-  `public/` folder), or
-- **Artisan's server:** `php artisan serve` and open `http://127.0.0.1:8000`.
+## ✅ Tests
 
-## 🗂 Project structure
-
-```
-routes/web.php                    ← URLs  ("/" → the home page)
-resources/views/
-  layouts/site.blade.php          ← page shell: <head>, overlays, preloader, nav, footer, scripts
-  home.blade.php                  ← the landing page: lists the sections in order
-  sections/                       ← EACH SECTION IS ITS OWN FILE — edit content here
-    preloader  nav  hero  about  services  work  metrics  stack  terminal  contact  footer
-public/                           ← the only folder visitors can reach
-  css/
-    base.css                      ← colors, fonts, spacing (the theme)
-    components.css                ← shared bits: buttons, cards, terminal, cursor, forms, wordmark…
-    sections/                     ← one stylesheet per section
-  js/
-    main.js                       ← boots everything
-    core/                         ← smooth-scroll · cursor · brand (wordmark) · reveal · utils
-    sections/                     ← one module per section
-  assets/brand/                   ← logo files (original, round mark, favicon, touch icon)
+```bash
+php artisan test
 ```
 
-Each section has three files with the same name, e.g. **hero** =
-`resources/views/sections/hero.blade.php` + `public/css/sections/hero.css` + `public/js/sections/hero.js`.
+## 🗂 Where things are
 
-## ✏️ How to edit common things
-
-| I want to… | Edit |
-|---|---|
-| Change any text | the section's file in `resources/views/sections/` |
-| Change the page title / description | `resources/views/layouts/site.blade.php` (`<title>`, `<meta>`) |
-| Add or remove a project | `resources/views/sections/work.blade.php` → an `<article class="work__item">` block |
-| Update the terminal answers | `public/js/sections/terminal.js` (top: `PROJECTS`, `SKILLS`, `SOCIALS`, `EMAIL`…) |
-| Change the wordmark words | `public/js/core/brand.js` → the `WORDS` array |
-| Change the rotating hero phrases | `public/js/sections/hero.js` → the `phrases` array |
-| Recolor the site | `public/css/base.css` → `--accent`, `--accent-2`, `--bg` |
-| Contact details (email, phone, GitHub, LinkedIn) | `nav`, `contact` and `footer` in `resources/views/sections/`, plus `public/js/sections/terminal.js` |
-
-## 🎨 Design system (quick reference)
-
-All colors, spacing and type are CSS custom properties in `public/css/base.css`.
-
-- **Fonts:** Space Grotesk (display), Inter (body), JetBrains Mono (code) and IBM Plex Sans Arabic
-  (Arabic text) — via Google Fonts.
-- **Motion:** reveal anything with `data-reveal="up|fade|scale|lines|chars"`; count numbers up with
-  `data-count`; magnetic hover with `data-magnetic`.
-- **Accessibility:** respects `prefers-reduced-motion` and hides the custom cursor on touch devices.
+```
+routes/web.php, routes/admin.php      public site and dashboard URLs
+app/Http/Controllers(/Admin)          page logic
+app/Models                            Project, Website, Service, Skill(Category), Metric, ContactMessage, …
+config/settings.php                   every editable site setting
+config/access.php                     permissions and default roles
+config/themes.php                     the color themes
+resources/views/sections              the home-page sections (Blade)
+resources/views/admin                 the dashboard
+public/css, public/js                 styles and scripts (no build step)
+docs/                                 the guides
+```
