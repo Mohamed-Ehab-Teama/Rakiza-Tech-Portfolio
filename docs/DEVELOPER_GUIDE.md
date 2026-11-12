@@ -312,6 +312,7 @@ PHPUnit cannot see animations, so `tests/browser/check-page.mjs` opens the runni
 php artisan serve                                  # in one terminal
 node tests/browser/check-page.mjs                  # in another (default http://127.0.0.1:8000)
 node tests/browser/check-page.mjs http://rakiza-tech-landing-page.test
+node tests/browser/check-page.mjs --headed          # watch it run in a visible window
 BROWSER="/path/to/chrome" node tests/browser/check-page.mjs   # if the browser is not found
 ```
 

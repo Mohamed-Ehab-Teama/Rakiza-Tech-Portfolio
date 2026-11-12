@@ -33,7 +33,10 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
-            'serve' => true,
+            // Off: the site never serves private files. When true, Laravel adds
+            // signed-URL routes at /storage/{path}, so a missing PUBLIC image
+            // (e.g. a deleted upload) answered 403 instead of 404.
+            'serve' => false,
             'throw' => false,
             'report' => false,
         ],

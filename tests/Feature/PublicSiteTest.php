@@ -148,6 +148,23 @@ class PublicSiteTest extends TestCase
             ->assertSee('Draft preview');
     }
 
+    public function test_uploaded_covers_load_eagerly_where_lazy_loading_cannot_work(): void
+    {
+        // The home page's Work strip is pinned and moved sideways with transforms:
+        // browsers never lazy-load images inside it, so its covers must load at once.
+        $project = Project::factory()->create(['visual' => 'image', 'cover_path' => 'projects/cover.png']);
+        $cover = 'src="'.asset('storage/projects/cover.png').'" alt="" loading=';
+
+        $this->get('/')->assertSee($cover.'"eager"', false);
+        $this->get('/projects/'.$project->slug)->assertSee($cover.'"eager"', false);
+        $this->get('/projects')->assertSee($cover.'"lazy"', false);   // normal grid: lazy works
+    }
+
+    public function test_missing_uploaded_files_return_404(): void
+    {
+        $this->get('/storage/projects/deleted-image.png')->assertNotFound();
+    }
+
     public function test_unknown_project_returns_404(): void
     {
         $this->get('/projects/nothing-here')->assertNotFound()->assertSee('Page not found');

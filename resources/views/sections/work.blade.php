@@ -28,7 +28,7 @@
             @foreach ($projects as $project)
               <article class="card card--spotlight work__item">
                 <div class="work__visual" data-type="{{ $project->display_visual }}" aria-hidden="true">
-                  @include('sections.work.visual', ['project' => $project])
+                  @include('sections.work.visual', ['project' => $project, 'lazy' => false])
                 </div>
                 <div class="work__body">
                   <header class="work__top">

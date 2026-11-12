@@ -1,11 +1,14 @@
 {{--
     The artwork at the top of a project card (decorative).
     Uses $project->display_visual: dashboard | store | kanban | terminal | map | image.
+    $lazy (default true): pass false where the browser cannot lazy-load — the
+    home page's pinned, sideways-moving Work strip never triggers native lazy
+    loading — or where the image is at the top of the page.
 --}}
 @switch($project->display_visual)
   @case('image')
     <div class="work__mock work__mock--image">
-      <img src="{{ $project->cover_url }}" alt="" loading="lazy" decoding="async" width="640" height="400" />
+      <img src="{{ $project->cover_url }}" alt="" loading="{{ ($lazy ?? true) ? 'lazy' : 'eager' }}" decoding="async" width="640" height="400" />
     </div>
     @break
 

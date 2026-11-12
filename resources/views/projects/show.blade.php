@@ -100,7 +100,7 @@
       @endif
 
       <div class="work__visual project__visual" data-type="{{ $project->display_visual }}" data-reveal="scale" aria-hidden="true">
-        @include('sections.work.visual', ['project' => $project])
+        @include('sections.work.visual', ['project' => $project, 'lazy' => false])
       </div>
     </div>
 

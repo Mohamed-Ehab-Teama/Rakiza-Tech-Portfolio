@@ -13,6 +13,7 @@
    Usage (with the site running, e.g. "php artisan serve"):
        node tests/browser/check-page.mjs                    # http://127.0.0.1:8000
        node tests/browser/check-page.mjs http://rakiza-tech-landing-page.test
+       node tests/browser/check-page.mjs --headed           # watch it in a visible window
        BROWSER="/path/to/chrome" node tests/browser/check-page.mjs
    Exit code 0 = all good, 1 = something failed (details are printed).
    ========================================================================== */
@@ -21,7 +22,9 @@ import { existsSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const BASE = (process.argv[2] || process.env.APP_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
+const args = process.argv.slice(2);
+const HEADED = args.includes("--headed");
+const BASE = (args.find((a) => !a.startsWith("--")) || process.env.APP_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /* ---- find a Chromium-based browser ------------------------------------- */
@@ -213,8 +216,12 @@ const browserPath = findBrowser();
 const profile = mkdtempSync(join(tmpdir(), "rakiza-browser-check-"));
 const port = 9400 + Math.floor(Math.random() * 400);
 const browser = spawn(browserPath, [
-  "--headless=new", `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`,
-  "--no-first-run", "--no-default-browser-check", "--disable-extensions", "about:blank",
+  ...(HEADED ? ["--window-size=1320,920"] : ["--headless=new"]),
+  `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`,
+  "--no-first-run", "--no-default-browser-check", "--disable-extensions",
+  // Keep animating even if the window is covered by other windows.
+  "--disable-backgrounding-occluded-windows", "--disable-renderer-backgrounding", "--disable-background-timer-throttling",
+  "about:blank",
 ], { stdio: "ignore" });
 
 let exitCode = 1;
@@ -227,7 +234,7 @@ try {
   const page = new Page(targets.find((t) => t.type === "page").webSocketDebuggerUrl);
   await page.connect();
 
-  console.log(`Checking ${BASE} with ${browserPath}\n`);
+  console.log(`Checking ${BASE} with ${browserPath} (${HEADED ? "visible window" : "headless"})\n`);
   const results = await runChecks(page);
   for (const r of results) console.log(`${r.ok ? "✔" : "✘"} ${r.name}${!r.ok && r.details ? "\n    → " + r.details : ""}`);
   const failed = results.filter((r) => !r.ok).length;
