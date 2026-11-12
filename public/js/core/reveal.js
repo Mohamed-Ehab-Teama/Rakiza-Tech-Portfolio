@@ -6,8 +6,50 @@
    Modifiers (data-* on the element):
      data-reveal-delay   (seconds)
      data-reveal-stagger (seconds, for grouped children via data-reveal-group)
+
+   Safety net ("catch-up"): a scroll trigger only fires when the page scrolls
+   past it. Some jumps never fire it — e.g. the browser restoring the scroll
+   position after a reload or Back, before the triggers exist. So whenever
+   scrolling settles, after a layout refresh and when the preloader finishes,
+   every animation that has not started yet is checked: if its element is
+   already on screen it plays now, if it is above the screen it jumps to its
+   end. Content can therefore never stay invisible (or a number stay at 0).
    ========================================================================== */
 import { qsa, prefersReducedMotion } from "./utils.js";
+
+/** Animations waiting for their element: { element, start(), finish(), started() } */
+const waiting = [];
+let catchUpInstalled = false;
+
+function register(element, start, finish, started) {
+  waiting.push({ element, start, finish, started, handled: false });
+}
+
+/* A GSAP tween controlled by a ScrollTrigger. */
+function registerTween(element, tween) {
+  register(element, () => tween.play(), () => tween.progress(1), () => tween.progress() > 0 || tween.isActive());
+}
+
+function catchUp() {
+  const screenBottom = window.innerHeight * 0.92;
+  waiting.forEach((item) => {
+    if (item.handled) return;
+    if (item.started()) { item.handled = true; return; }
+    const rect = item.element.getBoundingClientRect();
+    if (rect.bottom <= 0) { item.finish(); item.handled = true; }        // above the screen: show at once
+    else if (rect.top < screenBottom) { item.start(); item.handled = true; } // on screen: animate now
+  });
+}
+
+function installCatchUp() {
+  const ScrollTrigger = window.ScrollTrigger;
+  if (catchUpInstalled || !ScrollTrigger) return;
+  catchUpInstalled = true;
+  ScrollTrigger.addEventListener("scrollEnd", catchUp);
+  ScrollTrigger.addEventListener("refresh", () => requestAnimationFrame(catchUp));
+  window.addEventListener("preloader:done", () => requestAnimationFrame(catchUp));
+  window.addEventListener("load", () => setTimeout(catchUp, 300));
+}
 
 export function initReveals() {
   const gsap = window.gsap;
@@ -32,7 +74,7 @@ export function initReveals() {
         : new window.SplitType(el, { types: "lines, words", lineClass: "st-line", wordClass: "st-word" });
       splits.push(split);
       el.style.opacity = "1";
-      gsap.from(isChars ? split.chars : split.words, {
+      const tween = gsap.from(isChars ? split.chars : split.words, {
         yPercent: isChars ? 110 : 120,
         opacity: 0,
         duration: isChars ? 0.7 : 1,
@@ -41,6 +83,7 @@ export function initReveals() {
         delay: parseFloat(el.dataset.revealDelay) || 0,
         scrollTrigger: { trigger: el, start },
       });
+      registerTween(el, tween);
     });
 
     // Re-split on resize so line breaks track the new layout (debounced).
@@ -66,7 +109,7 @@ export function initReveals() {
   simple.forEach((el) => {
     const delay = parseFloat(el.dataset.revealDelay) || 0;
     el.classList.add("is-in"); // ensures final state if trigger removed
-    gsap.fromTo(
+    const tween = gsap.fromTo(
       el,
       revealFrom(el.dataset.reveal),
       {
@@ -75,13 +118,14 @@ export function initReveals() {
         scrollTrigger: { trigger: el, start, once: true },
       }
     );
+    registerTween(el, tween);
   });
 
   // --- Grouped staggered reveals -----------------------------------------
   qsa("[data-reveal-group]").forEach((group) => {
     const children = Array.from(group.children);
     const stagger = parseFloat(group.dataset.revealStagger) || 0.1;
-    gsap.fromTo(
+    const tween = gsap.fromTo(
       children,
       { opacity: 0, y: 44 },
       {
@@ -90,7 +134,10 @@ export function initReveals() {
         scrollTrigger: { trigger: group, start, once: true },
       }
     );
+    registerTween(group, tween);
   });
+
+  installCatchUp();
 }
 
 function revealFrom(type) {
@@ -127,13 +174,18 @@ export function initCounters() {
     if (!gsap || !ScrollTrigger || prefersReducedMotion()) { render(to); return; }
 
     const obj = { v: 0 };
+    let started = false;
+    const count = () => {
+      if (started) return;
+      started = true;
+      gsap.to(obj, { v: to, duration: dur, ease: "expo.out", onUpdate: () => render(obj.v) });
+    };
+    const finish = () => { started = true; render(to); };
+
     render(0);
-    ScrollTrigger.create({
-      trigger: el,
-      start: "top 90%",
-      once: true,
-      onEnter: () =>
-        gsap.to(obj, { v: to, duration: dur, ease: "expo.out", onUpdate: () => render(obj.v) }),
-    });
+    ScrollTrigger.create({ trigger: el, start: "top 90%", once: true, onEnter: count });
+    register(el, count, finish, () => started);
   });
+
+  installCatchUp();
 }
