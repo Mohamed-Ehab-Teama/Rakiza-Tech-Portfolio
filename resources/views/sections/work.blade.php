@@ -158,7 +158,7 @@
                     <span class="work__term-dot work__term-dot--r"></span>
                     <span class="work__term-dot work__term-dot--y"></span>
                     <span class="work__term-dot work__term-dot--g"></span>
-                    <span class="work__term-name mono">teamora — zsh</span>
+                    <span class="work__term-name mono">rakiza — zsh</span>
                   </div>
                   <pre class="work__term-body mono"><span class="work__term-line"><span class="work__p">$</span> php artisan optimize</span>
       <span class="work__term-line work__o">› building 14 packages…</span>

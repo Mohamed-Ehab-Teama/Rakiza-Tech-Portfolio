@@ -1,5 +1,5 @@
     <footer class="footer" id="footer" aria-labelledby="footer-cta">
-      <span class="ghost-index footer__ghost" aria-hidden="true">Teamora</span>
+      <span class="ghost-index footer__ghost" aria-hidden="true">Rakiza</span>
 
       <div class="container footer__inner">
 
@@ -9,7 +9,7 @@
           <a href="#contact" class="footer__cta gradient-text" id="footer-cta"
              data-magnetic="0.2" data-reveal="lines">Let&rsquo;s talk &rarr;</a>
           <p class="footer__band-sub" data-reveal="up" data-reveal-delay="0.12">
-            Open to freelance, contract and full-time work &mdash; usually replying within a day.
+            Taking on new websites, systems and apps &mdash; usually replying within a day.
           </p>
         </div>
 
@@ -17,16 +17,17 @@
         <div class="footer__cols" data-reveal-group data-reveal-stagger="0.08">
 
           <div class="footer__brand-col">
-            <a href="#hero" class="footer__logo mono" aria-label="Mohamed Ehab Teama — back to top">
-              <span class="footer__brand" data-brand-type>Teamora</span><span class="footer__caret" aria-hidden="true">_</span>
+            <a href="#hero" class="footer__logo mono" aria-label="Rakiza Tech — back to top">
+              <img class="footer__mark" src="{{ asset('assets/brand/rakiza-mark.png') }}" alt="" width="48" height="48" loading="lazy" />
+              <span class="brand-type"><span class="footer__brand" data-brand-type>Rakiza Tech</span><span class="footer__caret" aria-hidden="true">_</span></span>
             </a>
             <p class="footer__tagline">
-              PHP / Laravel developer building web apps, APIs, dashboards
-              and the systems behind the screens.
+              A digital solutions company building websites, systems and apps
+              &mdash; and the solid foundations behind the screens.
             </p>
             <span class="status footer__status">
               <span class="dot" aria-hidden="true"></span>
-              Available for new work
+              Available for new projects
             </span>
           </div>
 
@@ -66,7 +67,8 @@
 
         <!-- Bottom bar -->
         <div class="footer__bottom mono">
-          <p class="footer__copy">&copy; 2026 Mohamed Ehab Teama &middot; Teamora &mdash; Built with HTML, CSS &amp; JS</p>
+          {{-- date('Y') is PHP: the server prints the current year, so this never goes stale. --}}
+          <p class="footer__copy">&copy; {{ date('Y') }} Rakiza Tech &mdash; Built with Laravel, HTML, CSS &amp; JS</p>
 
           <p class="footer__time" aria-label="Local time">
             <span class="footer__time-dot" aria-hidden="true">&#9679;</span>

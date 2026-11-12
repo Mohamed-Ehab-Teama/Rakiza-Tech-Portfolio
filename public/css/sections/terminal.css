@@ -71,7 +71,7 @@
 .terminal__body .terminal__block + .terminal__block { margin-top: var(--sp-3); }
 .terminal__body .terminal__block { display: block; }
 
-/* Echoed command line: "visitor@mwm:~$ help" */
+/* Echoed command line: "visitor@rakiza:~$ help" */
 .terminal__echo .term-prompt { color: var(--term); }
 .terminal__echo .term-path { color: var(--accent); }
 .terminal__echo .terminal__cmd { color: var(--text); }

@@ -16,24 +16,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mohamed Ehab Teama — PHP / Laravel Developer · Teamora</title>
-    <meta name="description" content="Mohamed Ehab Teama (Teamora) — PHP and Laravel developer from Egypt. I build web applications end to end: databases, APIs, and the screens on top." />
-    <meta name="author" content="Mohamed Ehab Teama" />
+    <title>Rakiza Tech — Digital Solutions: Websites, Systems &amp; Apps</title>
+    <meta name="description" content="Rakiza Tech is a digital solutions company from Egypt. We build websites, systems and apps end to end: databases, APIs, and the screens on top." />
+    <meta name="author" content="Rakiza Tech" />
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#08090d" />
-    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/favicon.svg') }}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/brand/favicon-32.png') }}" />
+    <link rel="apple-touch-icon" href="{{ asset('assets/brand/apple-touch-icon.png') }}" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Mohamed Ehab Teama — PHP / Laravel Developer · Teamora" />
-    <meta property="og:description" content="Mohamed Ehab Teama (Teamora) — PHP and Laravel developer from Egypt. I build web applications end to end: databases, APIs, and the screens on top." />
+    <meta property="og:site_name" content="Rakiza Tech" />
+    <meta property="og:title" content="Rakiza Tech — Digital Solutions: Websites, Systems &amp; Apps" />
+    <meta property="og:description" content="Rakiza Tech is a digital solutions company from Egypt. We build websites, systems and apps end to end: databases, APIs, and the screens on top." />
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    {{-- IBM Plex Sans Arabic draws the Arabic letters (ركيزة تك). Google serves it
+         with a unicode-range, so the browser only downloads it when Arabic text
+         is actually on screen. --}}
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap"
       rel="stylesheet"
     />
 

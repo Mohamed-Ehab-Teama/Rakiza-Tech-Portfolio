@@ -4,10 +4,10 @@
         <div class="container">
           <header class="section-head">
             <span class="section-label"><span class="idx">02</span> SERVICES</span>
-            <h2 class="section-title" id="services-title" data-reveal="lines">What I build, end to end.</h2>
+            <h2 class="section-title" id="services-title" data-reveal="lines">What we build, end to end.</h2>
             <p class="section-intro" data-reveal="up" data-reveal-delay="0.1">
               From the first line of code to the database under it and the pipeline that ships it —
-              five disciplines I bring to every product.
+              five disciplines we bring to every product.
             </p>
           </header>
 

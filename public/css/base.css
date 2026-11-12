@@ -43,10 +43,12 @@
   --glow: 0 0 0 1px rgba(var(--accent-rgb), 0.35),
           0 8px 40px -8px rgba(var(--accent-rgb), 0.35);
 
-  /* Typography */
-  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
-  --font-body:    "Inter", system-ui, -apple-system, sans-serif;
-  --font-mono:    "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+  /* Typography
+     The Latin fonts have no Arabic letters, so for Arabic text (ركيزة تك) the
+     browser falls through to the next font in the list: IBM Plex Sans Arabic. */
+  --font-display: "Space Grotesk", "IBM Plex Sans Arabic", "Inter", system-ui, sans-serif;
+  --font-body:    "Inter", "IBM Plex Sans Arabic", system-ui, -apple-system, sans-serif;
+  --font-mono:    "JetBrains Mono", "IBM Plex Sans Arabic", ui-monospace, "SFMono-Regular", monospace;
 
   /* Fluid type scale */
   --fs-hero:   clamp(3.2rem, 11vw, 12rem);

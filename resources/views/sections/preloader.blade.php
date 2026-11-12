@@ -1,10 +1,12 @@
-<div id="preloader" class="preloader" role="status" aria-live="polite" aria-label="Loading portfolio">
+<div id="preloader" class="preloader" role="status" aria-live="polite" aria-label="Loading Rakiza Tech">
   <!-- Curtain panels (slide up on exit for a staged reveal) -->
   <div class="preloader__curtains" aria-hidden="true">
     <span></span><span></span><span></span><span></span>
   </div>
 
   <div class="preloader__inner">
+    <img class="preloader__mark" src="{{ asset('assets/brand/rakiza-mark.png') }}" alt="" width="88" height="88" />
+
     <div class="term-window preloader__window">
       <div class="term-bar">
         <div class="term-dots">
@@ -12,13 +14,13 @@
           <span class="term-dot term-dot--y"></span>
           <span class="term-dot term-dot--g"></span>
         </div>
-        <span class="term-title">boot — teamora@portfolio</span>
+        <span class="term-title">boot — rakiza@tech</span>
       </div>
 
       <!-- Boot log (typed in by JS; final state below as the no-JS fallback) -->
       <div class="term-body preloader__log" id="preloader-log" aria-hidden="true">
         <p class="preloader__line"><span class="term-prompt">$</span> whoami</p>
-        <p class="preloader__line"><span class="term-out">mohamed ehab teama — php / laravel developer</span></p>
+        <p class="preloader__line"><span class="term-out">rakiza tech — digital solutions company</span></p>
         <p class="preloader__line"><span class="term-prompt">$</span> load --modules</p>
         <p class="preloader__line"><span class="term-out">&gt; code <span class="term-ok">&#10003;</span>&nbsp;&nbsp;apps <span class="term-ok">&#10003;</span>&nbsp;&nbsp;dashboards <span class="term-ok">&#10003;</span>&nbsp;&nbsp;databases <span class="term-ok">&#10003;</span>&nbsp;&nbsp;cli <span class="term-ok">&#10003;</span></span></p>
         <p class="preloader__line"><span class="term-prompt">$</span> build --portfolio</p>

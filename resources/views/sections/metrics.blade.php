@@ -7,7 +7,7 @@
             <h2 class="section-title" id="metrics-title" data-reveal="lines">By the numbers.</h2>
             <p class="section-intro" data-reveal="up" data-reveal-delay="0.1">
               A live-feeling snapshot of the work — deploys shipped, uptime held, and the
-              habits behind them. Real instrumentation, rendered like the dashboards I build.
+              habits behind them. Real instrumentation, rendered like the dashboards we build.
             </p>
           </header>
 

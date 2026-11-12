@@ -2,9 +2,9 @@
         <span class="ghost-index stack__ghost" aria-hidden="true">04</span>
 
         <!-- ====================================================================
-             PART A — infinite marquees of the tech I work with daily
+             PART A — infinite marquees of the tech we work with daily
              ==================================================================== -->
-        <div class="stack__marquees" aria-label="Technologies I work with" role="group">
+        <div class="stack__marquees" aria-label="Technologies we work with" role="group">
           <div class="marquee stack__marquee" style="--marquee-dur:42s">
             <div class="marquee__track">
               <span class="stack__chip mono">JavaScript</span>
@@ -82,9 +82,9 @@
         <div class="container">
           <header class="section-head">
             <span class="section-label"><span class="idx">04</span> STACK</span>
-            <h2 class="section-title" id="stack-title" data-reveal="lines">My toolkit.</h2>
+            <h2 class="section-title" id="stack-title" data-reveal="lines">Our toolkit.</h2>
             <p class="section-intro" data-reveal="up" data-reveal-delay="0.1">
-              The languages, frameworks and infrastructure I reach for — chosen for the job, not the hype,
+              The languages, frameworks and infrastructure we reach for — chosen for the job, not the hype,
               and battle-tested across products in production.
             </p>
           </header>

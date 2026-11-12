@@ -15,13 +15,13 @@
         <div class="container hero__inner">
           <div class="hero__intro flex items-center wrap gap-4">
             <span class="status"><span class="dot"></span> Available for new projects</span>
-            <span class="hero__id mono">MOHAMED EHAB TEAMA — PHP / LARAVEL DEVELOPER</span>
+            <span class="hero__id mono">RAKIZA TECH — DIGITAL SOLUTIONS</span>
           </div>
 
           <h1 class="hero__title">Code. Apps. Data.<br><span class="gradient-text">Shipped.</span></h1>
 
           <p class="hero__lead fs-lead">
-            Build the systems behind the screens — I design the database, the APIs and the
+            We build the systems behind the screens — designing the database, the APIs and the
             logic underneath, then the screens on top.
           </p>
 

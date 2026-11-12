@@ -1,94 +1,75 @@
-# Teamora — Mohamed Ehab Teama · Portfolio
+# Rakiza Tech — Digital Solutions
 
-A premium, animated developer portfolio with a dark **IDE / terminal / dashboard** aesthetic —
-**front-end only**, built with plain **HTML, CSS and JavaScript** (no framework, **no build step**).
-Animation is powered by GSAP + ScrollTrigger, Lenis smooth scroll and SplitType (all from CDN).
+The website of **Rakiza Tech** (ركيزة تك), a digital solutions company from Egypt that builds
+websites, systems and apps. *Rakiza* (ركيزة) means **pillar / foundation**.
 
-- **Owner:** Mohamed Ehab Teama (brand: *Teamora*) — PHP / Laravel Developer
-- **Animated wordmark:** types `Mohamed Ehab Teama` ⇄ `Teamora`
+A dark, animated **IDE / terminal / dashboard** style landing page, served by **Laravel 13**.
+The front end is plain **HTML (Blade), CSS and JavaScript** — no front-end framework and
+**no build step**. Animation uses GSAP + ScrollTrigger, Lenis smooth scroll and SplitType (from CDN).
 
-## ▶️ Run it
+> 🚧 Work in progress: a database and an admin dashboard (projects, websites, services, skills,
+> users & permissions, themes, SEO) are being added step by step.
 
-It's a static site. Just open it through any web server (recommended — works everywhere):
+## ▶️ Run it locally
 
-- **Laragon:** it lives in `www/Teamora-Apps`, so visit `http://teamora-apps.test/`
-  (or `http://localhost/Teamora-Apps/`).
-- **Any static server:**
-  ```bash
-  npx serve .
-  # or
-  python -m http.server 8080
-  # or the tiny bundled one (zero dependencies):
-  node serve.mjs 8080
-  ```
+Requirements: PHP 8.3+, Composer, MySQL (Laragon has all three).
 
-> Double-clicking `index.html` (the `file://` protocol) won't work, because the sections are pulled in
-> with `fetch()` (and ES modules + CDN libs are blocked on `file://`). Always use one of the servers above.
-
-## 🗂 Project structure (simple & no-build)
-
-```
-index.html              ← page shell: <head>, the preloader, and <div data-include> slots
-html/                   ← EACH SECTION IS ITS OWN FILE — edit your content here
-  nav.html  hero.html  about.html  services.html  work.html
-  metrics.html  stack.html  terminal.html  contact.html  footer.html
-css/
-  base.css              ← colors, fonts, spacing (the theme)  → recolor the whole site here
-  components.css        ← shared bits: buttons, cards, terminal, cursor, forms…
-  sections/             ← one stylesheet per section
-    nav.css  hero.css  about.css  services.css  work.css
-    metrics.css  stack.css  terminal.css  contact.css  footer.css  preloader.css
-js/
-  main.js               ← loads the html/ partials, then boots everything
-  core/                 ← include · smooth-scroll · cursor · brand (wordmark) · reveal · utils
-  sections/             ← one module per section (nav, hero, work, terminal, …)
-assets/
-  img/                  ← put your photo / project screenshots / resume.pdf here
-  favicon.svg
-serve.mjs               ← optional zero-dependency local server
+```bash
+composer install
+cp .env.example .env        # then check the DB_* values
+php artisan key:generate
+php artisan migrate
 ```
 
-**How the sections come together:** `index.html` contains one `<div data-include="html/hero.html">`
-per section. On load, `js/core/include.js` fetches each file and drops it in — so you edit a section
-in its own small file (`html/hero.html`, `html/work.html`, …) and just refresh. (The preloader is kept
-inline in `index.html` so something always shows while the partials load.)
+Then either:
 
-> Section ↔ file map: **Work** = `work.*`, **Metrics dashboard** = `metrics.*`, **Stack/skills** =
-> `stack.*` (HTML in `html/`, styles in `css/sections/`, behavior in `js/sections/`). Others match their name.
+- **Laragon:** open `http://rakiza-tech-landing-page.test` (the site's document root must be the
+  `public/` folder), or
+- **Artisan's server:** `php artisan serve` and open `http://127.0.0.1:8000`.
+
+## 🗂 Project structure
+
+```
+routes/web.php                    ← URLs  ("/" → the home page)
+resources/views/
+  layouts/site.blade.php          ← page shell: <head>, overlays, preloader, nav, footer, scripts
+  home.blade.php                  ← the landing page: lists the sections in order
+  sections/                       ← EACH SECTION IS ITS OWN FILE — edit content here
+    preloader  nav  hero  about  services  work  metrics  stack  terminal  contact  footer
+public/                           ← the only folder visitors can reach
+  css/
+    base.css                      ← colors, fonts, spacing (the theme)
+    components.css                ← shared bits: buttons, cards, terminal, cursor, forms, wordmark…
+    sections/                     ← one stylesheet per section
+  js/
+    main.js                       ← boots everything
+    core/                         ← smooth-scroll · cursor · brand (wordmark) · reveal · utils
+    sections/                     ← one module per section
+  assets/brand/                   ← logo files (original, round mark, favicon, touch icon)
+```
+
+Each section has three files with the same name, e.g. **hero** =
+`resources/views/sections/hero.blade.php` + `public/css/sections/hero.css` + `public/js/sections/hero.js`.
 
 ## ✏️ How to edit common things
 
 | I want to… | Edit |
 |---|---|
-| Change any text / bio / tagline | the section's file in `html/` (e.g. hero text → `html/hero.html`) |
-| Add or remove a project | `html/work.html` → copy/delete an `<article class="work__item">…</article>` block |
-| Update the terminal answers (`about`, `projects`, `skills`, `contact`) | `js/sections/terminal.js` (top of the file: `PROJECTS`, `SKILLS`, `SOCIALS`, `EMAIL`…) |
-| Recolor the site | `css/base.css` → the `--accent`, `--accent-2`, `--bg` variables |
-| Change the rotating hero phrases | `js/sections/hero.js` → the `phrases` array |
-| Change the wordmark words | `js/core/brand.js` → the `WORDS` array |
+| Change any text | the section's file in `resources/views/sections/` |
+| Change the page title / description | `resources/views/layouts/site.blade.php` (`<title>`, `<meta>`) |
+| Add or remove a project | `resources/views/sections/work.blade.php` → an `<article class="work__item">` block |
+| Update the terminal answers | `public/js/sections/terminal.js` (top: `PROJECTS`, `SKILLS`, `SOCIALS`, `EMAIL`…) |
+| Change the wordmark words | `public/js/core/brand.js` → the `WORDS` array |
+| Change the rotating hero phrases | `public/js/sections/hero.js` → the `phrases` array |
+| Recolor the site | `public/css/base.css` → `--accent`, `--accent-2`, `--bg` |
+| Contact details (email, phone, GitHub, LinkedIn) | `nav`, `contact` and `footer` in `resources/views/sections/`, plus `public/js/sections/terminal.js` |
 
 ## 🎨 Design system (quick reference)
 
-All colors/spacing/type are CSS custom properties in `css/base.css`.
+All colors, spacing and type are CSS custom properties in `public/css/base.css`.
 
-- **Accents:** `--accent` cyan `#6ee7ff`, `--accent-2` violet `#a78bfa`, `--term` green `#4ade80`.
-- **Fonts:** Space Grotesk (display), Inter (body), JetBrains Mono (code) — via Google Fonts.
-- **Motion:** Lenis smooth scroll; reveal anything by adding `data-reveal="up|fade|scale|lines|chars"`;
-  count up numbers with `data-count`; magnetic hover with `data-magnetic`.
+- **Fonts:** Space Grotesk (display), Inter (body), JetBrains Mono (code) and IBM Plex Sans Arabic
+  (Arabic text) — via Google Fonts.
+- **Motion:** reveal anything with `data-reveal="up|fade|scale|lines|chars"`; count numbers up with
+  `data-count`; magnetic hover with `data-magnetic`.
 - **Accessibility:** respects `prefers-reduced-motion` and hides the custom cursor on touch devices.
-
-## 📇 Your details (already wired in)
-
-- **Email:** mohamed111.me111@gmail.com · katchan111.me111@gmail.com
-- **Phone:** +20 109 016 6589
-- **GitHub:** https://github.com/Mohamed-Ehab-Teama
-- **LinkedIn:** https://www.linkedin.com/in/mohamed-ehab-teama-267154250/
-- **Location:** Cairo / Menofia, Egypt
-
-> Project details (Garage Parking System, LMS, Student Observer, …) currently use placeholder
-> descriptions/stacks/years — update them in `html/work.html` and `js/sections/terminal.js`.
-
-## 🚀 Deploy
-
-Upload the whole folder to any static host or to cPanel's `public_html` (no PHP/DB needed).
-A Laravel back-end can be added later without throwing this away.

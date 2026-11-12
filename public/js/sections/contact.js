@@ -115,7 +115,7 @@ export function init() {
   const SUCCESS_STEPS = [
     { text: "> packaging message…", cls: "term-out" },
     { text: "> sending…", cls: "term-out" },
-    { text: "✓ message sent. I'll get back to you within 24h.", cls: "term-ok" },
+    { text: "✓ message sent. We'll get back to you within 24h.", cls: "term-ok" },
   ];
 
   function finishSuccess(myGen) {

@@ -1,7 +1,7 @@
 /* ==========================================================================
    components.css — shared UI components reused across all sections
    Buttons · labels · cards · tags · marquee · terminal chrome · cursor ·
-   grain · scroll progress · form controls · code text
+   grain · scroll progress · form controls · code text · brand wordmark
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -407,3 +407,14 @@ body.cursor-down .cursor__ring { width: 30px; height: 30px; margin: -15px 0 0 -1
   user-select: none;
   z-index: 0;
 }
+
+/* --------------------------------------------------------------------------
+   Animated wordmark (nav + footer): the typed name and its blinking caret.
+   brand.js adds .is-rtl while the Arabic name is shown; row-reverse then puts
+   the caret on the LEFT, where the next right-to-left letter appears.
+   -------------------------------------------------------------------------- */
+.brand-type {
+  display: inline-flex;
+  align-items: baseline;
+}
+.brand-type.is-rtl { flex-direction: row-reverse; }

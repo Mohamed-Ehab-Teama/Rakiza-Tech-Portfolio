@@ -70,17 +70,17 @@ export function init() {
   ];
 
   const ABOUT_MD = [
-    "# Mohamed Ehab Teama",
-    "PHP / Laravel Developer · Software Developer.",
-    "I build web applications end to end — database, APIs and the screens on top.",
-    "Cairo / Menofia, Egypt — available anytime, full-time or freelance.",
+    "# Rakiza Tech",
+    "Digital Solutions · Websites, Systems & Apps.",
+    "We build websites, systems and apps end to end — database, APIs and the screens on top.",
+    "Cairo / Menofia, Egypt — available for new projects.",
   ];
 
   const CONTACT_TXT = [
     `email   ${EMAIL}`,
     "phone   +20 109 016 6589",
     "github  github.com/Mohamed-Ehab-Teama",
-    "status  available anytime",
+    "status  available for new projects",
   ];
 
   const FILES = {
@@ -101,10 +101,10 @@ export function init() {
     },
     "contact.txt": () =>
       `<div class="term-line term-out">${CONTACT_TXT.map(esc).join("\n")}</div>`,
-    "resume.pdf": () =>
+    "company-profile.pdf": () =>
       line(
         "warn",
-        "resume.pdf is a binary file. Run <span class=\"term-path\">contact</span> to request the latest copy."
+        "company-profile.pdf is a binary file. Run <span class=\"term-path\">contact</span> to request the latest copy."
       ),
   };
 
@@ -137,9 +137,9 @@ export function init() {
 
     about() {
       return (
-        line("ok", '<span class="terminal__title">Mohamed Ehab Teama</span> — PHP / Laravel Developer') +
-        line("out", "I build web applications end to end — the database, the APIs and the logic underneath, then the screens on top. I care about clean, maintainable code and fast data models.") +
-        line("out", '<span class="terminal__muted">Cairo / Menofia, Egypt · PHP · Laravel · MySQL · available anytime</span>') +
+        line("ok", '<span class="terminal__title">Rakiza Tech</span> — Digital Solutions') +
+        line("out", "We build websites, systems and apps end to end — the database, the APIs and the logic underneath, then the screens on top. We care about clean, maintainable code and fast data models.") +
+        line("out", '<span class="terminal__muted">Cairo / Menofia, Egypt · PHP · Laravel · MySQL · available for new projects</span>') +
         line("out", 'Run <span class="term-path">skills</span>, <span class="term-path">projects</span> or <span class="term-path">contact</span> to dig deeper.')
       );
     },
@@ -164,7 +164,7 @@ export function init() {
           )}</span>`
       ).join("");
       return (
-        line("ok", "What I build, end to end:") +
+        line("ok", "What we build, end to end:") +
         `<div class="term-line"><div class="terminal__cols">${rows}</div></div>`
       );
     },
@@ -210,7 +210,7 @@ export function init() {
 
     social() {
       return (
-        line("ok", "Find me online:") +
+        line("ok", "Find us online:") +
         list(
           SOCIALS.map(
             ([name, href]) =>
@@ -229,7 +229,7 @@ export function init() {
           '<span class="terminal__file">about.md</span>' +
           '<span class="terminal__dir">projects/</span>' +
           '<span class="terminal__file">skills.json</span>' +
-          '<span class="terminal__file">resume.pdf</span>' +
+          '<span class="terminal__file">company-profile.pdf</span>' +
           '<span class="terminal__file">contact.txt</span>' +
           "</span>"
       );
@@ -263,14 +263,15 @@ export function init() {
     },
 
     banner() {
+      // "RAKIZA" in ASCII art (each \\ is one backslash inside a JS string).
       const art =
-        " _____ ___  __  __  ___  ___  _   \n" +
-        "|_   _| __|/  \\|  \\/  |/ _ \\| _ \\/_\\  \n" +
-        "  | | | _|| () | |\\/| | (_) |   / _ \\ \n" +
-        "  |_| |___|\\__/|_|  |_|\\___/|_|_\\_/ \\_\\";
+        " ___     _     _  __  ___   ____    _   \n" +
+        "| _ \\   /_\\   | |/ / |_ _| |_  /   /_\\  \n" +
+        "|   /  / _ \\  | ' <   | |   / /   / _ \\ \n" +
+        "|_|_\\ /_/ \\_\\ |_|\\_\\ |___| /___| /_/ \\_\\";
       return (
         `<div class="term-line"><span class="terminal__banner">${esc(art)}</span></div>` +
-        line("out", '<span class="terminal__muted">Mohamed Ehab Teama — PHP / Laravel dev. Type</span> <span class="term-path">help</span> <span class="terminal__muted">for commands.</span>')
+        line("out", '<span class="terminal__muted">Rakiza Tech — digital solutions. Type</span> <span class="term-path">help</span> <span class="terminal__muted">for commands.</span>')
       );
     },
 
@@ -297,9 +298,9 @@ export function init() {
   /* help listing (name, description) — drives the `help` table */
   const HELP = [
     ["help", "show this list"],
-    ["about", "who is Mohamed Ehab Teama"],
+    ["about", "who is Rakiza Tech"],
     ["skills", "grouped tech stack"],
-    ["services", "the 5 things I build"],
+    ["services", "the 5 things we build"],
     ["projects", "selected work"],
     ["contact", "email & socials"],
     ["social", "social links"],
@@ -307,7 +308,7 @@ export function init() {
     ["cat <file>", "print a file"],
     ["date", "current date & time"],
     ["echo <text>", "print text"],
-    ["banner", "ASCII Teamora banner"],
+    ["banner", "ASCII Rakiza banner"],
     ["clear", "clear the screen"],
   ];
 
@@ -324,7 +325,7 @@ export function init() {
     const block = document.createElement("div");
     block.className = "terminal__block terminal__echo";
     block.innerHTML =
-      `<div class="term-line"><span class="term-prompt">visitor@mwm</span>` +
+      `<div class="term-line"><span class="term-prompt">visitor@rakiza</span>` +
       `<span class="term-path">:~$</span> ` +
       `<span class="terminal__cmd">${esc(raw)}</span></div>`;
     output.appendChild(block);

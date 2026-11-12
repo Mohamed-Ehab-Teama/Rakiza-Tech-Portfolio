@@ -1,7 +1,8 @@
     <header class="nav" id="nav">
       <div class="nav__inner container container--wide">
-        <a href="#hero" class="nav__logo mono" aria-label="Mohamed Ehab Teama — back to top">
-          <span class="nav__brand" data-brand-type>Teamora</span><span class="nav__caret" aria-hidden="true">_</span>
+        <a href="#hero" class="nav__logo mono" aria-label="Rakiza Tech — back to top">
+          <img class="nav__mark" src="{{ asset('assets/brand/rakiza-mark.png') }}" alt="" width="34" height="34" />
+          <span class="brand-type"><span class="nav__brand" data-brand-type>Rakiza Tech</span><span class="nav__caret" aria-hidden="true">_</span></span>
         </a>
 
         <nav class="nav__links" aria-label="Primary">
@@ -45,10 +46,8 @@
           <div class="nav__menu-foot">
             <a href="mailto:mohamed111.me111@gmail.com" class="nav__menu-email mono link-underline">mohamed111.me111@gmail.com</a>
             <ul class="nav__menu-socials" aria-label="Social links">
-              <li><a href="#" class="nav__menu-social mono link-underline">GitHub</a></li>
-              <li><a href="#" class="nav__menu-social mono link-underline">LinkedIn</a></li>
-              <li><a href="#" class="nav__menu-social mono link-underline">X</a></li>
-              <li><a href="#" class="nav__menu-social mono link-underline">Dribbble</a></li>
+              <li><a href="https://github.com/Mohamed-Ehab-Teama" class="nav__menu-social mono link-underline" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+              <li><a href="https://www.linkedin.com/in/mohamed-ehab-teama-267154250/" class="nav__menu-social mono link-underline" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
             </ul>
             <span class="nav__menu-meta mono">Cairo / Menofia, Egypt</span>
           </div>

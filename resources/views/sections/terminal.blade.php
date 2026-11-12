@@ -4,10 +4,10 @@
         <div class="container container--narrow">
           <header class="section-head section-head--center">
             <span class="section-label"><span class="idx">//</span> PLAYGROUND</span>
-            <h2 class="section-title" id="terminal-title" data-reveal="lines">Talk to my terminal.</h2>
+            <h2 class="section-title" id="terminal-title" data-reveal="lines">Talk to our terminal.</h2>
             <p class="section-intro" data-reveal="up" data-reveal-delay="0.1">
               A real, interactive shell — no smoke and mirrors. Type a command (try
-              <span class="mono text-accent">help</span>) and explore the portfolio the way I would.
+              <span class="mono text-accent">help</span>) and explore the portfolio the way we would.
             </p>
           </header>
 
@@ -18,13 +18,13 @@
                 <span class="term-dot term-dot--y"></span>
                 <span class="term-dot term-dot--g"></span>
               </span>
-              <span class="term-title mono">visitor@mwm: ~</span>
+              <span class="term-title mono">visitor@rakiza: ~</span>
             </div>
 
             <div class="term-body terminal__body" id="term-output" aria-label="Terminal output" tabindex="0">
               <!-- Static fallback (no-JS / pre-demo). JS clears this on first run. -->
               <div class="term-line" data-static>
-                <span class="term-out">Welcome to <span class="text-accent">mwm</span> shell. Type</span>
+                <span class="term-out">Welcome to <span class="text-accent">rakiza</span> shell. Type</span>
                 <span class="term-path">help</span>
                 <span class="term-out">to get started.</span>
               </div>
@@ -35,7 +35,7 @@
             </div>
 
             <div class="terminal__inputline">
-              <span class="term-prompt">visitor@mwm</span><span class="term-path">:~$</span>
+              <span class="term-prompt">visitor@rakiza</span><span class="term-path">:~$</span>
               <input
                 id="term-input"
                 class="terminal__input mono"

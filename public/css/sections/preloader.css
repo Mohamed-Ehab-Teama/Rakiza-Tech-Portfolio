@@ -57,6 +57,13 @@ body.loaded .preloader { pointer-events: none; }
   will-change: transform, opacity;
 }
 
+.preloader__mark {                /* Rakiza Tech logo above the boot window */
+  align-self: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+}
+
 .preloader__window {
   width: 100%;
   box-shadow:

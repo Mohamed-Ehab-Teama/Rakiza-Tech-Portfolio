@@ -11,7 +11,7 @@
               </h2>
               <p class="section-intro contact__say" data-reveal="up" data-reveal-delay="0.1">
                 Have a product, a dashboard, an API or a tool that needs building?
-                Tell me what you're working on — I read every message and reply personally.
+                Tell us what you're working on — we read every message and reply personally.
               </p>
             </header>
 

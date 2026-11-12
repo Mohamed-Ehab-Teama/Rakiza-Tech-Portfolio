@@ -43,7 +43,7 @@ export function init() {
      path we clear it and retype line-by-line so the typing is the star. */
   const lines = [
     { html: '<span class="term-prompt">$</span> whoami' },
-    { html: '<span class="term-out">mohamed ehab teama — php / laravel developer</span>' },
+    { html: '<span class="term-out">rakiza tech — digital solutions company</span>' },
     { html: '<span class="term-prompt">$</span> load --modules' },
     {
       html:
