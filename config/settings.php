@@ -107,6 +107,15 @@ return [
             'label' => 'Home page texts',
             'description' => 'Headings and paragraphs of the home page sections.',
             'fields' => [
+                'hero_title' => [
+                    'label' => 'Hero — headline', 'type' => 'text', 'default' => 'Code. Apps. Data.',
+                    'rules' => ['required', 'string', 'max:60'],
+                ],
+                'hero_title_highlight' => [
+                    'label' => 'Hero — highlighted word', 'type' => 'text', 'default' => 'Shipped.',
+                    'rules' => ['nullable', 'string', 'max:30'],
+                    'help' => 'Shown on its own line under the headline, in the gradient color.',
+                ],
                 'hero_badge' => [
                     'label' => 'Hero — small label', 'type' => 'text', 'default' => 'RAKIZA TECH — DIGITAL SOLUTIONS',
                     'rules' => ['nullable', 'string', 'max:80'],

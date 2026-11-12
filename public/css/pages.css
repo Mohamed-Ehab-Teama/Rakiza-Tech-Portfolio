@@ -1,0 +1,147 @@
+/* ==========================================================================
+   pages.css — inner pages: /projects (grid) and /projects/{slug} (case study)
+   Reuses the work cards (work.css) and the shared tokens from base.css.
+   ========================================================================== */
+
+.page { padding-top: clamp(7rem, 16vh, 10rem); }
+
+/* --- Breadcrumb ---------------------------------------------------------- */
+.page__crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6em;
+  margin-bottom: var(--sp-6);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+.page__crumbs a { color: var(--text-dim); }
+.page__crumbs a:hover { color: var(--accent); }
+.page__crumbs [aria-current] { color: var(--text); }
+
+.page__head { margin-bottom: clamp(2rem, 4vw, 3rem); }
+.page__title { font-size: var(--fs-d2); }
+
+.page__empty { color: var(--text-dim); }
+
+/* Draft preview banner (only dashboard users see drafts) */
+.page__banner {
+  position: fixed;
+  left: 50%;
+  bottom: 1.25rem;
+  z-index: calc(var(--z-nav) + 1);
+  transform: translateX(-50%);
+  max-width: calc(100% - 2rem);
+  padding: 0.7rem 1.1rem;
+  font-size: 0.75rem;
+  color: var(--on-accent);
+  background: var(--warn);
+  border-radius: var(--r-full);
+  box-shadow: 0 16px 40px -16px rgba(var(--shadow-rgb), calc(0.8 * var(--shadow-a)));
+}
+
+/* --- /projects grid ------------------------------------------------------ */
+.page__grid {
+  display: grid;
+  gap: var(--sp-5);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 760px)  { .page__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1180px) { .page__grid { grid-template-columns: repeat(3, 1fr); } }
+/* work.css sizes cards for the home page's horizontal track (fixed width,
+   full height, stretchy artwork); in this grid they size naturally instead. */
+.page__card.work__item { width: auto; height: auto; }
+.page__card .work__visual { aspect-ratio: 16 / 11; flex: 0 0 auto; }
+
+/* --- /projects/{slug} ---------------------------------------------------- */
+.project__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4) clamp(1.5rem, 4vw, 3rem);
+  margin-bottom: var(--sp-5);
+  font-size: 0.8rem;
+}
+.project__facts dt {
+  margin-bottom: 0.35rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.project__facts dd { color: var(--text); }
+
+.project__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-6);
+}
+
+.project__visual {
+  margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+  aspect-ratio: 16 / 8;
+}
+@media (max-width: 720px) { .project__visual { aspect-ratio: 16 / 11; } }
+
+.project__summary {
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.project__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-top: var(--sp-6);
+}
+
+/* --- Long text written in the dashboard (Markdown → HTML) ---------------- */
+.prose > * + * { margin-top: var(--sp-4); }
+.prose h2,
+.prose h3 {
+  margin-top: var(--sp-7);
+  font-size: var(--fs-h3);
+  color: var(--text);
+}
+.prose ul,
+.prose ol { padding-left: 1.3em; }
+.prose ul { list-style: disc; }
+.prose ol { list-style: decimal; }
+.prose li { color: var(--text-dim); }
+.prose li + li { margin-top: 0.35em; }
+.prose li::marker { color: var(--accent); }
+.prose a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+  background: var(--surface-2);
+  border-radius: 4px;
+}
+.prose blockquote {
+  padding-left: var(--sp-4);
+  border-left: 2px solid var(--accent);
+  color: var(--text-dim);
+}
+
+/* --- Previous / next ----------------------------------------------------- */
+.page__pager {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-top: clamp(3rem, 7vw, 5rem);
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--border);
+}
+.page__pager-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  max-width: 48%;
+}
+.page__pager-link--next { margin-left: auto; text-align: right; }
+.page__pager-dir { font-size: 0.72rem; letter-spacing: 0.08em; color: var(--text-faint); }
+.page__pager-title { font-family: var(--font-display); font-size: var(--fs-h3); color: var(--text); }
+.page__pager-link:hover .page__pager-title { color: var(--accent); }

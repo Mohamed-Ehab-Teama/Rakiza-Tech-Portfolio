@@ -1,22 +1,27 @@
+@php
+    // On the home page the links jump to sections (#about); on other pages they
+    // go back to the home page first (/#about).
+    $onHome = request()->routeIs('home');
+    $base = $onHome ? '' : route('home');
+    $links = [['hero', 'Home'], ['about', 'About'], ['services', 'Services'], ['work', 'Work'], ['stack', 'Stack'], ['contact', 'Contact']];
+    $brandWords = array_values(array_filter([setting('site_name'), setting('site_name_ar')]));
+@endphp
     <header class="nav" id="nav">
       <div class="nav__inner container container--wide">
-        <a href="#hero" class="nav__logo mono" aria-label="Rakiza Tech — back to top">
+        <a href="{{ $base }}#hero" class="nav__logo mono" aria-label="{{ setting('site_name') }} — back to top">
           <img class="nav__mark" src="{{ asset('assets/brand/rakiza-mark.png') }}" alt="" width="34" height="34" />
-          <span class="brand-type"><span class="nav__brand" data-brand-type>Rakiza Tech</span><span class="nav__caret" aria-hidden="true">_</span></span>
+          <span class="brand-type"><span class="nav__brand" data-brand-type data-brand-words="{{ json_encode($brandWords, JSON_UNESCAPED_UNICODE) }}">{{ setting('site_name') }}</span><span class="nav__caret" aria-hidden="true">_</span></span>
         </a>
 
         <nav class="nav__links" aria-label="Primary">
-          <a href="#hero" class="nav__link is-active"><span class="nav__idx mono">00</span> Home</a>
-          <a href="#about" class="nav__link"><span class="nav__idx mono">01</span> About</a>
-          <a href="#services" class="nav__link"><span class="nav__idx mono">02</span> Services</a>
-          <a href="#work" class="nav__link"><span class="nav__idx mono">03</span> Work</a>
-          <a href="#stack" class="nav__link"><span class="nav__idx mono">04</span> Stack</a>
-          <a href="#contact" class="nav__link"><span class="nav__idx mono">05</span> Contact</a>
+          @foreach ($links as $i => [$id, $label])
+            <a href="{{ $base }}#{{ $id }}" class="nav__link{{ $onHome && $i === 0 ? ' is-active' : '' }}"><span class="nav__idx mono">{{ sprintf('%02d', $i) }}</span> {{ $label }}</a>
+          @endforeach
         </nav>
 
         <div class="nav__actions">
           @include('partials.theme-switch')
-          <a href="#contact" class="btn btn--primary nav__cta" data-magnetic="0.3">Let's talk</a>
+          <a href="{{ $base }}#contact" class="btn btn--primary nav__cta" data-magnetic="0.3">Let's talk</a>
           <button
             type="button"
             class="nav__burger"
@@ -36,21 +41,25 @@
           <span class="section-label nav__menu-label"><span class="idx">//</span> Navigation</span>
 
           <nav class="nav__menu-links" aria-label="Mobile">
-            <a href="#hero" class="nav__menu-link"><span class="nav__idx mono">00</span><span class="nav__menu-text">Home</span></a>
-            <a href="#about" class="nav__menu-link"><span class="nav__idx mono">01</span><span class="nav__menu-text">About</span></a>
-            <a href="#services" class="nav__menu-link"><span class="nav__idx mono">02</span><span class="nav__menu-text">Services</span></a>
-            <a href="#work" class="nav__menu-link"><span class="nav__idx mono">03</span><span class="nav__menu-text">Work</span></a>
-            <a href="#stack" class="nav__menu-link"><span class="nav__idx mono">04</span><span class="nav__menu-text">Stack</span></a>
-            <a href="#contact" class="nav__menu-link"><span class="nav__idx mono">05</span><span class="nav__menu-text">Contact</span></a>
+            @foreach ($links as $i => [$id, $label])
+              <a href="{{ $base }}#{{ $id }}" class="nav__menu-link"><span class="nav__idx mono">{{ sprintf('%02d', $i) }}</span><span class="nav__menu-text">{{ $label }}</span></a>
+            @endforeach
           </nav>
 
           <div class="nav__menu-foot">
-            <a href="mailto:mohamed111.me111@gmail.com" class="nav__menu-email mono link-underline">mohamed111.me111@gmail.com</a>
-            <ul class="nav__menu-socials" aria-label="Social links">
-              <li><a href="https://github.com/Mohamed-Ehab-Teama" class="nav__menu-social mono link-underline" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-              <li><a href="https://www.linkedin.com/in/mohamed-ehab-teama-267154250/" class="nav__menu-social mono link-underline" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-            </ul>
-            <span class="nav__menu-meta mono">Cairo / Menofia, Egypt</span>
+            @if (setting('contact_email'))
+              <a href="mailto:{{ setting('contact_email') }}" class="nav__menu-email mono link-underline">{{ setting('contact_email') }}</a>
+            @endif
+            @if ($socials = social_links())
+              <ul class="nav__menu-socials" aria-label="Social links">
+                @foreach ($socials as $social)
+                  <li><a href="{{ $social['url'] }}" class="nav__menu-social mono link-underline" target="_blank" rel="noopener noreferrer">{{ $social['label'] }}</a></li>
+                @endforeach
+              </ul>
+            @endif
+            @if (setting('location'))
+              <span class="nav__menu-meta mono">{{ setting('location') }}</span>
+            @endif
           </div>
         </div>
       </div>

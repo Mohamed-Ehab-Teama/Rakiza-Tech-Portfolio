@@ -1,8 +1,10 @@
 /* ==========================================================================
    brand.js — animated wordmark.
-   Any element with [data-brand-type] cycles: types "Rakiza Tech", pauses,
-   erases it, types "ركيزة تك", pauses, erases, and repeats — with the
-   adjacent .nav__caret / .footer__caret giving the blinking-cursor feel.
+   Any element with [data-brand-type] cycles through its words (the JSON in
+   data-brand-words, i.e. the company name and its Arabic name from Settings):
+   types "Rakiza Tech", pauses, erases it, types "ركيزة تك", pauses, erases,
+   and repeats — with the adjacent .nav__caret / .footer__caret giving the
+   blinking-cursor feel.
 
    Arabic is written right-to-left, so while an Arabic word is on screen the
    element gets dir="rtl" and its .brand-type wrapper gets .is-rtl, which
@@ -10,8 +12,18 @@
    appears.
    Honors prefers-reduced-motion (renders the static brand "Rakiza Tech").
    ========================================================================== */
-const WORDS = ["Rakiza Tech", "ركيزة تك"];
+const FALLBACK_WORDS = ["Rakiza Tech", "ركيزة تك"];
 const ARABIC = /[؀-ۿ]/; // any character from the Arabic Unicode block
+
+/* The element's words from data-brand-words (JSON), or the fallback. */
+function wordsOf(el) {
+  try {
+    const words = JSON.parse(el.dataset.brandWords || "[]").filter(Boolean);
+    return words.length ? words : FALLBACK_WORDS;
+  } catch (e) {
+    return FALLBACK_WORDS;
+  }
+}
 
 export function initBrand() {
   const els = Array.from(document.querySelectorAll("[data-brand-type]"));
@@ -21,7 +33,8 @@ export function initBrand() {
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   els.forEach((el, offset) => {
-    if (reduced) { el.textContent = WORDS[0]; return; }
+    const WORDS = wordsOf(el);
+    if (reduced || WORDS.length === 1) { el.textContent = WORDS[0]; return; }
 
     const wrapper = el.closest(".brand-type");
     let wordIndex = offset % WORDS.length;

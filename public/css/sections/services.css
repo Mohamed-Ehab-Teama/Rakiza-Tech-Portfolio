@@ -40,10 +40,12 @@
   .services__grid {
     grid-template-columns: repeat(6, 1fr);
     grid-auto-rows: 1fr;
+    grid-auto-flow: dense;   /* fill gaps when the number of cards changes */
   }
-  /* row 1: wide CODE (4) + APPS (2)  ·  row 2: three equal thirds */
-  .services__card--wide { grid-column: span 4; }
+  /* row 1: wide CODE (4) + APPS (2)  ·  row 2: three equal thirds.
+     The wide rule must come after the generic one, or "span 2" wins. */
   .services__card        { grid-column: span 2; }
+  .services__card--wide  { grid-column: span 4; }
 }
 
 /* --------------------------------------------------------------------------

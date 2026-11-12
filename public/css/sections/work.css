@@ -555,3 +555,14 @@
   .work__item:hover,
   .work__more:hover { transform: none; }
 }
+
+/* --------------------------------------------------------------------------
+   "Uploaded image" artwork — the project's cover screenshot fills the frame
+   -------------------------------------------------------------------------- */
+.work__mock--image { inset: 0; }
+.work__mock--image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}

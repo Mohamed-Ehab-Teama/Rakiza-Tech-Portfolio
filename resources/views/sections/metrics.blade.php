@@ -4,82 +4,41 @@
         <div class="container">
           <header class="section-head">
             <span class="section-label"><span class="idx">//</span> DASHBOARD</span>
-            <h2 class="section-title" id="metrics-title" data-reveal="lines">By the numbers.</h2>
-            <p class="section-intro" data-reveal="up" data-reveal-delay="0.1">
-              A live-feeling snapshot of the work — deploys shipped, uptime held, and the
-              habits behind them. Real instrumentation, rendered like the dashboards we build.
-            </p>
+            <h2 class="section-title" id="metrics-title" data-reveal="lines">{{ setting('metrics_title') }}</h2>
+            @if (setting('metrics_intro'))
+              <p class="section-intro" data-reveal="up" data-reveal-delay="0.1">{{ setting('metrics_intro') }}</p>
+            @endif
           </header>
 
           <div class="metrics__grid" data-reveal-group data-reveal-stagger="0.07">
 
-            <!-- KPI 1 — Deploys -->
-            <article class="card metrics__card metrics__kpi" aria-label="Deploys this year">
-              <header class="metrics__kpi-head">
-                <span class="metrics__kpi-label">Deploys</span>
-                <span class="metrics__badge mono">YTD</span>
-              </header>
-              <div class="metrics__kpi-num display tnum">
-                <span class="tnum" data-count="1240" data-count-suffix="">1,240</span>
-              </div>
-              <svg class="metrics__spark" viewBox="0 0 120 36" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-                <polyline class="metrics__spark-line" points="0,30 15,26 30,28 45,18 60,21 75,12 90,15 105,7 120,4"></polyline>
-              </svg>
-              <p class="metrics__delta metrics__delta--up mono">
-                <span class="metrics__delta-arrow" aria-hidden="true">&#9650;</span> +12.4% this month
-              </p>
-            </article>
-
-            <!-- KPI 2 — Uptime -->
-            <article class="card metrics__card metrics__kpi" aria-label="Service uptime">
-              <header class="metrics__kpi-head">
-                <span class="metrics__kpi-label">Uptime</span>
-                <span class="metrics__badge mono">30d</span>
-              </header>
-              <div class="metrics__kpi-num display tnum">
-                <span class="tnum" data-count="99.98" data-count-decimals="2" data-count-suffix="%">99.98%</span>
-              </div>
-              <svg class="metrics__spark metrics__spark--term" viewBox="0 0 120 36" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-                <polyline class="metrics__spark-line" points="0,10 15,8 30,11 45,7 60,9 75,6 90,8 105,5 120,6"></polyline>
-              </svg>
-              <p class="metrics__delta metrics__delta--up mono">
-                <span class="metrics__delta-arrow" aria-hidden="true">&#9650;</span> +0.03% this month
-              </p>
-            </article>
-
-            <!-- KPI 3 — Projects -->
-            <article class="card metrics__card metrics__kpi" aria-label="Projects shipped">
-              <header class="metrics__kpi-head">
-                <span class="metrics__kpi-label">Projects</span>
-                <span class="metrics__badge mono">ALL</span>
-              </header>
-              <div class="metrics__kpi-num display tnum">
-                <span class="tnum" data-count="80" data-count-suffix="+">80+</span>
-              </div>
-              <svg class="metrics__spark metrics__spark--violet" viewBox="0 0 120 36" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-                <polyline class="metrics__spark-line" points="0,32 15,29 30,24 45,25 60,18 75,16 90,17 105,10 120,8"></polyline>
-              </svg>
-              <p class="metrics__delta metrics__delta--up mono">
-                <span class="metrics__delta-arrow" aria-hidden="true">&#9650;</span> +3 this month
-              </p>
-            </article>
-
-            <!-- KPI 4 — Coffees -->
-            <article class="card metrics__card metrics__kpi" aria-label="Coffees consumed">
-              <header class="metrics__kpi-head">
-                <span class="metrics__kpi-label">Coffees</span>
-                <span class="metrics__badge mono">&#8734;</span>
-              </header>
-              <div class="metrics__kpi-num display tnum">
-                <span class="tnum" data-count="9800" data-count-suffix="">9,800</span>
-              </div>
-              <svg class="metrics__spark metrics__spark--amber" viewBox="0 0 120 36" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-                <polyline class="metrics__spark-line" points="0,20 15,14 30,22 45,16 60,24 75,15 90,21 105,13 120,18"></polyline>
-              </svg>
-              <p class="metrics__delta metrics__delta--up mono">
-                <span class="metrics__delta-arrow" aria-hidden="true">&#9650;</span> +7.1% this month
-              </p>
-            </article>
+            {{-- KPI cards: Dashboard → Numbers (group "Dashboard cards") --}}
+            @php($sparks = ["0,30 15,26 30,28 45,18 60,21 75,12 90,15 105,7 120,4", "0,10 15,8 30,11 45,7 60,9 75,6 90,8 105,5 120,6", "0,32 15,29 30,24 45,25 60,18 75,16 90,17 105,10 120,8", "0,20 15,14 30,22 45,16 60,24 75,15 90,21 105,13 120,18"])
+            @php($sparkClass = ["accent" => "", "term" => " metrics__spark--term", "violet" => " metrics__spark--violet", "amber" => " metrics__spark--amber"])
+            @foreach ($kpis as $kpi)
+              <article class="card metrics__card metrics__kpi" aria-label="{{ $kpi->label }}">
+                <header class="metrics__kpi-head">
+                  <span class="metrics__kpi-label">{{ $kpi->label }}</span>
+                  @if ($kpi->badge)
+                    <span class="metrics__badge mono">{{ $kpi->badge }}</span>
+                  @endif
+                </header>
+                <div class="metrics__kpi-num display tnum">
+                  <span class="tnum" data-count="{{ $kpi->value }}" data-count-decimals="{{ $kpi->decimals }}" data-count-prefix="{{ $kpi->prefix }}" data-count-suffix="{{ $kpi->suffix }}">{{ $kpi->formatted }}</span>
+                </div>
+                <svg class="metrics__spark{{ $sparkClass[$kpi->color] ?? "" }}" viewBox="0 0 120 36" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  <polyline class="metrics__spark-line" points="{{ $sparks[$loop->index % 4] }}"></polyline>
+                </svg>
+                @if ($kpi->note)
+                  <p class="metrics__delta metrics__delta--{{ $kpi->trend === "down" ? "down" : "up" }} mono">
+                    @if ($kpi->trend !== "flat")
+                      <span class="metrics__delta-arrow" aria-hidden="true">{!! $kpi->trend === "down" ? "&#9660;" : "&#9650;" !!}</span>
+                    @endif
+                    {{ $kpi->note }}
+                  </p>
+                @endif
+              </article>
+            @endforeach
 
             <!-- BAR CHART — Commits / month -->
             <article class="card metrics__card metrics__bars" aria-label="Commits per month, last twelve months">
@@ -150,37 +109,30 @@
               </footer>
             </article>
 
-            <!-- DONUTS — Frontend / Backend proficiency -->
-            <article class="card metrics__card metrics__donuts" aria-label="Discipline proficiency">
-              <header class="metrics__card-head">
-                <h3 class="metrics__card-title">Proficiency</h3>
-                <span class="metrics__badge mono">SKILL</span>
-              </header>
+            @if ($proficiency->isNotEmpty())
+              <!-- DONUTS — average skill level of the first two stack categories -->
+              <article class="card metrics__card metrics__donuts" aria-label="Discipline proficiency">
+                <header class="metrics__card-head">
+                  <h3 class="metrics__card-title">Proficiency</h3>
+                  <span class="metrics__badge mono">SKILL</span>
+                </header>
 
-              <div class="metrics__donuts-row">
-                <figure class="metrics__donut" data-pct="92">
-                  <svg class="metrics__donut-svg" viewBox="0 0 120 120" role="img" aria-label="Frontend 92 percent">
-                    <circle class="metrics__donut-track" cx="60" cy="60" r="52"></circle>
-                    <circle class="metrics__donut-ring metrics__donut-ring--accent" cx="60" cy="60" r="52"></circle>
-                  </svg>
-                  <figcaption class="metrics__donut-cap">
-                    <span class="metrics__donut-pct tnum" data-count="92" data-count-suffix="%">92%</span>
-                    <span class="metrics__donut-name">Frontend</span>
-                  </figcaption>
-                </figure>
-
-                <figure class="metrics__donut" data-pct="88">
-                  <svg class="metrics__donut-svg" viewBox="0 0 120 120" role="img" aria-label="Backend 88 percent">
-                    <circle class="metrics__donut-track" cx="60" cy="60" r="52"></circle>
-                    <circle class="metrics__donut-ring metrics__donut-ring--violet" cx="60" cy="60" r="52"></circle>
-                  </svg>
-                  <figcaption class="metrics__donut-cap">
-                    <span class="metrics__donut-pct tnum" data-count="88" data-count-suffix="%">88%</span>
-                    <span class="metrics__donut-name">Backend</span>
-                  </figcaption>
-                </figure>
-              </div>
-            </article>
+                <div class="metrics__donuts-row">
+                  @foreach ($proficiency as $item)
+                    <figure class="metrics__donut" data-pct="{{ $item['value'] }}">
+                      <svg class="metrics__donut-svg" viewBox="0 0 120 120" role="img" aria-label="{{ $item['name'] }} {{ $item['value'] }} percent">
+                        <circle class="metrics__donut-track" cx="60" cy="60" r="52"></circle>
+                        <circle class="metrics__donut-ring metrics__donut-ring--{{ $loop->first ? 'accent' : 'violet' }}" cx="60" cy="60" r="52"></circle>
+                      </svg>
+                      <figcaption class="metrics__donut-cap">
+                        <span class="metrics__donut-pct tnum" data-count="{{ $item['value'] }}" data-count-suffix="%">{{ $item['value'] }}%</span>
+                        <span class="metrics__donut-name">{{ $item['name'] }}</span>
+                      </figcaption>
+                    </figure>
+                  @endforeach
+                </div>
+              </article>
+            @endif
 
             <!-- ACTIVITY LOG -->
             <article class="card metrics__card metrics__log" aria-label="Recent activity">

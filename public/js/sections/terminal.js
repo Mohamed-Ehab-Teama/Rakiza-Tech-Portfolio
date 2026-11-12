@@ -13,11 +13,27 @@
      throws on empty or odd input.
    ========================================================================== */
 
-const EMAIL = "mohamed111.me111@gmail.com";
+/* The answers come from the database: HomeController::terminalData() prints
+   them as JSON in <script id="terminal-data"> (sections/terminal.blade.php). */
+function readData() {
+  try {
+    const el = document.getElementById("terminal-data");
+    return el ? JSON.parse(el.textContent) : {};
+  } catch (e) {
+    return {};
+  }
+}
 
 export function init() {
   const root = document.getElementById("terminal");
   if (!root) return;
+
+  const DATA = readData();
+  const NAME = DATA.name || "Rakiza Tech";
+  const EMAIL = DATA.email || "";
+  const PHONE = DATA.phone || "";
+  const LOCATION = DATA.location || "";
+  const AVAILABILITY = DATA.availability || "";
 
   const output = root.querySelector("#term-output");
   const input = root.querySelector("#term-input");
@@ -40,48 +56,30 @@ export function init() {
   /* ---- content -------------------------------------------------------------
      Centralised so several commands can share it (ls/cat/projects/etc).
      ------------------------------------------------------------------------ */
-  const SOCIALS = [
-    ["GitHub", "https://github.com/Mohamed-Ehab-Teama"],
-    ["LinkedIn", "https://www.linkedin.com/in/mohamed-ehab-teama-267154250/"],
-  ];
+  const SOCIALS = (DATA.socials || []).map((s) => [s.label, s.url]);
 
-  const PROJECTS = [
-    ["Garage Parking System", "Laravel · MySQL · Blade · Tailwind", "2024"],
-    ["LMS", "Laravel · MySQL · Bootstrap", "2024"],
-    ["Student Observer", "Laravel · MySQL · Chart.js", "2023"],
-    ["DevTools CLI", "PHP · Laravel · CLI", "2023"],
-    ["Fleet Tracker", "Laravel · WebSocket · MySQL", "2023"],
-  ];
+  const PROJECTS = (DATA.projects || []).map((p) => [p.title, p.stack, p.year, p.url]);
 
-  const SERVICES = [
-    ["code", "Clean, typed, tested code built to outlive the sprint it shipped in."],
-    ["apps", "Web & product apps end to end — from auth to the final pixel."],
-    ["dashboards", "Analytics & admin dashboards that turn raw data into decisions."],
-    ["databases", "Schema design, queries & performance that scale and stay fast."],
-    ["cli", "Tooling, scripts & CI/CD — repeatable pipelines that do the boring work."],
-  ];
+  const SERVICES = (DATA.services || []).map((s) => [s.name.toLowerCase(), s.description]);
 
-  const SKILLS = [
-    ["Languages", ["PHP", "JavaScript", "SQL"]],
-    ["Backend", ["Laravel", "REST APIs", "Livewire", "OOP"]],
-    ["Frontend", ["Blade", "JavaScript", "Bootstrap", "Tailwind"]],
-    ["Data", ["MySQL", "Eloquent", "Redis"]],
-    ["Ops", ["Git", "Composer", "Linux", "Docker"]],
-  ];
+  const SKILLS = (DATA.skills || []).map((g) => [g.group, g.items]);
 
   const ABOUT_MD = [
-    "# Rakiza Tech",
-    "Digital Solutions · Websites, Systems & Apps.",
+    `# ${NAME}`,
+    `${DATA.tagline || "Digital Solutions"}.`,
     "We build websites, systems and apps end to end — database, APIs and the screens on top.",
-    "Cairo / Menofia, Egypt — available for new projects.",
-  ];
+    [LOCATION, AVAILABILITY.toLowerCase()].filter(Boolean).join(" — "),
+  ].filter(Boolean);
 
+  // "label   value" lines; the label column fits the longest label + a space.
+  const labelWidth = Math.max(8, ...SOCIALS.map(([name]) => name.length + 1));
+  const pad = (label) => label.toLowerCase().padEnd(labelWidth);
   const CONTACT_TXT = [
-    `email   ${EMAIL}`,
-    "phone   +20 109 016 6589",
-    "github  github.com/Mohamed-Ehab-Teama",
-    "status  available for new projects",
-  ];
+    EMAIL && pad("email") + EMAIL,
+    PHONE && pad("phone") + PHONE,
+    ...SOCIALS.map(([name, href]) => pad(name) + href.replace(/^https?:\/\/(www\.)?/, "")),
+    AVAILABILITY && pad("status") + AVAILABILITY.toLowerCase(),
+  ].filter(Boolean);
 
   const FILES = {
     "about.md": () =>
@@ -137,9 +135,9 @@ export function init() {
 
     about() {
       return (
-        line("ok", '<span class="terminal__title">Rakiza Tech</span> — Digital Solutions') +
+        line("ok", `<span class="terminal__title">${esc(NAME)}</span> — ${esc(DATA.tagline || "Digital Solutions")}`) +
         line("out", "We build websites, systems and apps end to end — the database, the APIs and the logic underneath, then the screens on top. We care about clean, maintainable code and fast data models.") +
-        line("out", '<span class="terminal__muted">Cairo / Menofia, Egypt · PHP · Laravel · MySQL · available for new projects</span>') +
+        line("out", `<span class="terminal__muted">${esc([LOCATION, "PHP · Laravel · MySQL", AVAILABILITY.toLowerCase()].filter(Boolean).join(" · "))}</span>`) +
         line("out", 'Run <span class="term-path">skills</span>, <span class="term-path">projects</span> or <span class="term-path">contact</span> to dig deeper.')
       );
     },
@@ -170,41 +168,42 @@ export function init() {
     },
 
     projects() {
+      if (!PROJECTS.length) return line("out", "No projects published yet.");
       const rows = PROJECTS.map(
-        ([name, stack, year], i) =>
+        ([name, stack, year, url], i) =>
           `<div><span class="term-out tnum">${String(i + 1).padStart(
             2,
             "0"
-          )}</span> <span class="terminal__title">${esc(
+          )}</span> <a class="terminal__title" href="${esc(url)}">${esc(
             name
-          )}</span> <span class="terminal__muted">— ${esc(
+          )}</a> <span class="terminal__muted">— ${esc(
             stack
           )}</span> <span class="term-path">${esc(year)}</span></div>`
       ).join("");
       return (
         line("ok", "Selected work:") +
         `<div class="term-line">${rows}</div>` +
-        line("out", 'More on <a href="https://github.com/Mohamed-Ehab-Teama" target="_blank" rel="noopener">github.com/Mohamed-Ehab-Teama</a> · run <span class="term-path">contact</span> to get in touch.')
+        line("out", 'Click a title to open its case study · run <span class="term-path">contact</span> to get in touch.')
       );
     },
 
     contact() {
+      const tel = PHONE.replace(/[^0-9+]/g, "");
       return (
         line("ok", "Let's build something.") +
-        line(
-          "out",
-          `email   <a href="mailto:${esc(EMAIL)}">${esc(EMAIL)}</a>`
-        ) +
-        line("out", `phone   <a href="tel:+201090166589">+20 109 016 6589</a>`) +
-        line(
-          "out",
-          "socials " +
-            SOCIALS.map(
-              ([name, href]) =>
-                `<a href="${esc(href)}" rel="noopener">${esc(name)}</a>`
-            ).join(" · ")
-        ) +
-        line("out", '<span class="terminal__muted">Cairo / Menofia, Egypt · usually replies within a day</span>')
+        (EMAIL ? line("out", `email   <a href="mailto:${esc(EMAIL)}">${esc(EMAIL)}</a>`) : "") +
+        (PHONE ? line("out", `phone   <a href="tel:${esc(tel)}">${esc(PHONE)}</a>`) : "") +
+        (SOCIALS.length
+          ? line(
+              "out",
+              "socials " +
+                SOCIALS.map(
+                  ([name, href]) =>
+                    `<a href="${esc(href)}" target="_blank" rel="noopener">${esc(name)}</a>`
+                ).join(" · ")
+            )
+          : "") +
+        line("out", `<span class="terminal__muted">${esc([LOCATION, "usually replies within a day"].filter(Boolean).join(" · "))}</span>`)
       );
     },
 
@@ -271,7 +270,7 @@ export function init() {
         "|_|_\\ /_/ \\_\\ |_|\\_\\ |___| /___| /_/ \\_\\";
       return (
         `<div class="term-line"><span class="terminal__banner">${esc(art)}</span></div>` +
-        line("out", '<span class="terminal__muted">Rakiza Tech — digital solutions. Type</span> <span class="term-path">help</span> <span class="terminal__muted">for commands.</span>')
+        line("out", `<span class="terminal__muted">${esc(NAME)} — digital solutions. Type</span> <span class="term-path">help</span> <span class="terminal__muted">for commands.</span>`)
       );
     },
 
@@ -298,9 +297,9 @@ export function init() {
   /* help listing (name, description) — drives the `help` table */
   const HELP = [
     ["help", "show this list"],
-    ["about", "who is Rakiza Tech"],
+    ["about", `who is ${NAME}`],
     ["skills", "grouped tech stack"],
-    ["services", "the 5 things we build"],
+    ["services", "what we build"],
     ["projects", "selected work"],
     ["contact", "email & socials"],
     ["social", "social links"],

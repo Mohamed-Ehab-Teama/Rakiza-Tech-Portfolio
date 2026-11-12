@@ -246,13 +246,10 @@ function startCodeRain(canvas, reduced) {
    Typewriter
    ========================================================================== */
 function startTypewriter(el, reduced) {
-  const phrases = [
-    "building Laravel REST APIs",
-    "designing MySQL schemas",
-    "shipping full-stack web apps",
-    "writing clean, testable PHP",
-    "automating with artisan & CLIs",
-  ];
+  // Phrases come from Dashboard → Settings → Home page texts (data-phrases JSON).
+  let phrases = [];
+  try { phrases = JSON.parse(el.dataset.phrases || "[]").filter(Boolean); } catch (e) { phrases = []; }
+  if (!phrases.length) phrases = ["building websites, systems & apps"];
 
   if (reduced) {
     el.textContent = phrases[0];

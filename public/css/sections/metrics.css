@@ -172,6 +172,7 @@
   color: var(--text-faint);
 }
 .metrics__delta--up  { color: var(--term); }
+.metrics__delta--down { color: var(--danger); }
 .metrics__delta-arrow { font-size: 0.7em; }
 
 /* --------------------------------------------------------------------------

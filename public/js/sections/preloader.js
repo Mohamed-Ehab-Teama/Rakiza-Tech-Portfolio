@@ -7,7 +7,13 @@
 
 export function init() {
   const root = document.getElementById("preloader");
-  if (!root) return;
+  if (!root) {
+    // Pages without the boot animation (e.g. /projects): release at once so
+    // code waiting for "preloader:done" still runs.
+    document.body.classList.add("loaded");
+    window.dispatchEvent(new CustomEvent("preloader:done"));
+    return;
+  }
 
   const app = window.app || {};
   const gsap = window.gsap;
@@ -39,24 +45,12 @@ export function init() {
 
   if (app.stopScroll) app.stopScroll();
 
-  /* The HTML ships the final boot text as a no-JS fallback. For the animated
-     path we clear it and retype line-by-line so the typing is the star. */
-  const lines = [
-    { html: '<span class="term-prompt">$</span> whoami' },
-    { html: '<span class="term-out">rakiza tech — digital solutions company</span>' },
-    { html: '<span class="term-prompt">$</span> load --modules' },
-    {
-      html:
-        '<span class="term-out">&gt; code <span class="term-ok">✓</span>' +
-        "  apps <span class=\"term-ok\">✓</span>" +
-        "  dashboards <span class=\"term-ok\">✓</span>" +
-        "  databases <span class=\"term-ok\">✓</span>" +
-        "  cli <span class=\"term-ok\">✓</span></span>",
-    },
-    { html: '<span class="term-prompt">$</span> build --portfolio' },
-    { html: '<span class="term-out">&gt; compiling assets…</span>' },
-    { html: '<span class="term-ok">&gt; ready.</span>' },
-  ];
+  /* The HTML ships the final boot text (sections/preloader.blade.php) as a
+     no-JS fallback. For the animated path we copy those lines, clear the log
+     and retype them line-by-line so the typing is the star. */
+  const lines = logEl
+    ? Array.from(logEl.querySelectorAll(".preloader__line")).map((p) => ({ html: p.innerHTML }))
+    : [];
 
   if (logEl) logEl.innerHTML = "";
   // Reset the counter/bar so the no-JS "100" fallback doesn't flash first.

@@ -1,14 +1,21 @@
 <?php
 
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
 | Public website
 |--------------------------------------------------------------------------
-| "/" renders resources/views/home.blade.php.
-| Route::view() is a shortcut for a route that only returns a view.
-| (In Step 7 this becomes a controller that loads content from the database.)
-| ->name('home') lets the code link to it with route('home') instead of "/".
 */
-Route::view('/', 'home')->name('home');
+Route::get('/', HomeController::class)->name('home');
+
+Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+Route::get('/projects/{project:slug}', [ProjectController::class, 'show'])->name('projects.show');
+
+// Contact form — "throttle:contact" is the limit defined in AppServiceProvider.
+Route::post('/contact', [ContactController::class, 'store'])
+    ->middleware('throttle:contact')
+    ->name('contact.store');

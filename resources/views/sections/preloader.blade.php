@@ -1,4 +1,4 @@
-<div id="preloader" class="preloader" role="status" aria-live="polite" aria-label="Loading Rakiza Tech">
+<div id="preloader" class="preloader" role="status" aria-live="polite" aria-label="Loading {{ setting('site_name') }}">
   <!-- Curtain panels (slide up on exit for a staged reveal) -->
   <div class="preloader__curtains" aria-hidden="true">
     <span></span><span></span><span></span><span></span>
@@ -17,10 +17,10 @@
         <span class="term-title">boot — rakiza@tech</span>
       </div>
 
-      <!-- Boot log (typed in by JS; final state below as the no-JS fallback) -->
+      <!-- Boot log: preloader.js re-types these lines one by one (they are also the no-JS fallback) -->
       <div class="term-body preloader__log" id="preloader-log" aria-hidden="true">
         <p class="preloader__line"><span class="term-prompt">$</span> whoami</p>
-        <p class="preloader__line"><span class="term-out">rakiza tech — digital solutions company</span></p>
+        <p class="preloader__line"><span class="term-out">{{ Str::lower(setting('site_name')) }} — {{ Str::lower(Str::before(setting('tagline'), ':')) }}</span></p>
         <p class="preloader__line"><span class="term-prompt">$</span> load --modules</p>
         <p class="preloader__line"><span class="term-out">&gt; code <span class="term-ok">&#10003;</span>&nbsp;&nbsp;apps <span class="term-ok">&#10003;</span>&nbsp;&nbsp;dashboards <span class="term-ok">&#10003;</span>&nbsp;&nbsp;databases <span class="term-ok">&#10003;</span>&nbsp;&nbsp;cli <span class="term-ok">&#10003;</span></span></p>
         <p class="preloader__line"><span class="term-prompt">$</span> build --portfolio</p>

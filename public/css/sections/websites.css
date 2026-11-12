@@ -1,0 +1,111 @@
+/* ==========================================================================
+   websites.css — "Websites we launched" grid (sections/websites.blade.php)
+   Each card is a small browser window with the site's screenshot.
+   ========================================================================== */
+
+.websites { overflow: hidden; }
+
+.websites__ghost {
+  top: clamp(-1rem, 2vw, 2rem);
+  right: var(--gutter);
+  font-family: var(--font-mono);
+}
+
+.websites__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--sp-5);
+  grid-template-columns: 1fr;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+@media (min-width: 720px)  { .websites__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1080px) { .websites__grid { grid-template-columns: repeat(3, 1fr); } }
+
+.websites__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: clamp(1rem, 2vw, 1.4rem);
+}
+
+/* --- Browser window ------------------------------------------------------ */
+.websites__browser {
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--term-bg-1), var(--term-bg-2));
+}
+.websites__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 0.55rem 0.8rem;
+  background: rgba(var(--tint-rgb), 0.025);
+  border-bottom: 1px solid var(--border);
+}
+.websites__bar .term-dot { width: 9px; height: 9px; }
+.websites__address {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  background: rgba(var(--tint-rgb), 0.04);
+  border-radius: var(--r-full);
+}
+.websites__screen {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(80% 90% at 20% 10%, rgba(var(--accent-rgb), 0.16), transparent 60%),
+    radial-gradient(70% 80% at 90% 90%, rgba(var(--accent2-rgb), 0.16), transparent 60%);
+}
+.websites__screen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform var(--dur-3) var(--ease-out);
+}
+.websites__card:hover .websites__screen img { transform: scale(1.04); }
+.websites__initial {
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 700;
+  color: rgba(var(--tint-rgb), 0.16);
+}
+
+/* --- Text ---------------------------------------------------------------- */
+.websites__body { display: flex; flex-direction: column; gap: var(--sp-2); flex: 1; }
+.websites__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.websites__status {
+  padding: 0.2em 0.7em;
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+}
+.websites__status--live { color: var(--term); border-color: rgba(var(--term-rgb), 0.35); }
+.websites__status--in_progress { color: var(--warn); }
+.websites__name { font-size: var(--fs-h3); }
+.websites__desc { font-size: var(--fs-sm); line-height: 1.6; }
+.websites__link {
+  align-self: flex-start;
+  margin-top: auto;
+  padding-top: var(--sp-3);
+  font-size: 0.78rem;
+  color: var(--accent);
+}

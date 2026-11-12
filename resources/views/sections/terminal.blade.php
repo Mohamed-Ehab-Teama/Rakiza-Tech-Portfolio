@@ -58,4 +58,9 @@
             <span class="terminal__hint-key">clear</span> reset
           </p>
         </div>
+
+        {{-- What the terminal answers with (projects, skills, contact…), built by
+             HomeController::terminalData() and read by public/js/sections/terminal.js.
+             JSON_HEX_TAG keeps "</script>" inside the data from closing this tag. --}}
+        <script type="application/json" id="terminal-data">@json($terminal, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG)</script>
       </section>

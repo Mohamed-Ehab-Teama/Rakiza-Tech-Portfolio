@@ -1,14 +1,18 @@
 /* ==========================================================================
-   contact.js — front-end-only contact form behaviour.
+   contact.js — contact form behaviour.
 
    Responsibilities:
      1. Validate Name (non-empty), Email (simple regex), Message (non-empty)
         on submit. Mark invalid fields (aria-invalid) and attach a per-field
         error message tied to the input via aria-describedby, plus a short
         summary in the live status region.
-     2. On success: animate the button into a "sending…" state, then play a
-        short terminal-style typewriter, then reset the form after a delay.
-     3. NO network call — backend comes later (see TODO below).
+     2. Send the form to the server (POST /contact → ContactController) with
+        fetch, as JSON-accepting request; the CSRF token (_token) and the
+        hidden honeypot field travel inside the FormData.
+     3. On success: play a short terminal-style typewriter, then reset the
+        form. On failure: show the server's field errors, or a clear message
+        for "too many messages" (429), "session expired" (419) and offline.
+   Without JavaScript the form still works as a normal POST + page reload.
 
    Works without GSAP and honours prefers-reduced-motion (instant success).
    A per-submit generation token invalidates any in-flight typewriter timers.
@@ -192,6 +196,45 @@ export function init() {
     }
   }
 
+  /* ---- server errors ---------------------------------------------------- */
+  function renderServerError(text) {
+    statusEl.innerHTML = "";
+    showStatus("error");
+    statusEl.appendChild(lineEl("✗ " + text, "term-err"));
+  }
+
+  // 422 from Laravel: { errors: { email: ["a valid email is required"], … } }
+  function renderServerFieldErrors(errors) {
+    clearAllInvalid();
+    const invalid = fields.filter((f) => errors[f.label]);
+    invalid.forEach((f) => {
+      const ownMessage = f.msg;            // keep the field's normal message
+      f.msg = String(errors[f.label][0] || ownMessage);
+      setFieldError(f);
+      f.msg = ownMessage;
+    });
+    if (invalid.length) renderErrors(invalid);
+    else renderServerError("please check the form and try again.");
+  }
+
+  /* ---- send to the server ------------------------------------------------ */
+  async function send() {
+    const response = await fetch(form.action, {
+      method: "POST",
+      headers: { Accept: "application/json", "X-Requested-With": "XMLHttpRequest" },
+      body: new FormData(form),
+      credentials: "same-origin",
+    });
+    let data = {};
+    try { data = await response.json(); } catch (err) { /* not JSON */ }
+    return { ok: response.ok, status: response.status, data };
+  }
+
+  function stopSending() {
+    setBusy(false);
+    submitBtn.innerHTML = btnDefaultHTML;
+  }
+
   /* ---- submit ----------------------------------------------------------- */
   function onSubmit(e) {
     e.preventDefault();
@@ -204,17 +247,28 @@ export function init() {
     const invalid = validate();
     if (invalid.length) { renderErrors(invalid); return; }
 
-    // TODO: wire to backend API — POST the form payload to a real endpoint and
-    // only render success after a 2xx response. Front-end only for now.
-
     setBusy(true);
     enterSendingState();
 
-    if (!gsap || reduced) {
-      window.setTimeout(() => renderSuccessInstant(myGen), reduced ? 0 : 280);
-      return;
-    }
-    window.setTimeout(() => renderSuccessTyped(myGen), 520);
+    send()
+      .then(({ ok, status, data }) => {
+        if (myGen !== gen) return;
+        if (ok) {
+          if (!gsap || reduced) renderSuccessInstant(myGen);
+          else renderSuccessTyped(myGen);
+          return;
+        }
+        stopSending();
+        if (status === 422 && data.errors) renderServerFieldErrors(data.errors);
+        else if (status === 429) renderServerError("too many messages — please try again in a few minutes.");
+        else if (status === 419) renderServerError("this page expired — refresh it and send again.");
+        else renderServerError("something went wrong on our side — please email us instead.");
+      })
+      .catch(() => {
+        if (myGen !== gen) return;
+        stopSending();
+        renderServerError("couldn't reach the server — check your connection and try again.");
+      });
   }
 
   form.addEventListener("submit", onSubmit);
